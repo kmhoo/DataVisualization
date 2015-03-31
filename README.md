@@ -5,7 +5,7 @@ MSAN 622 Information Visualization
 |  **Name:** | Kailey Hoo           |
 |-----------:|:-----------------------|
 | **Email:** | <kmhoo@usfca.edu> |
-|   **Web:** | <http://msan622.github.io/spring-2015-msan622> |
+|   **Web:** | <http://kmhoo.github.io/DataVisualization/> |
 
 ## About Me ##
 
