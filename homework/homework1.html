@@ -124,49 +124,50 @@
 </nav>
 
 <div class="container">
+    <div class="col-lg-12 text-center" id="chart">
     <!-- create a default for the tooltip value -->
-    <div id="tooltip" class="hidden">
-        <p><span id="value">100</span></p>
-    </div>
-
-    <div style="text-align:center;">
-        <h1>Homework #1: Letter Count Bar Chart</h1>
-        <p> 
-            This homework counts the letters entered in the query string of the URL or in the text box, and displays a bar chart of those counts.
-            <br>
-            <b>Please enter a query string after the URL (e.g. ?HelloWorld) or enter string into text box to regenerate the chart.</b>
-            <br>
-            Kailey Hoo: <a href="https://github.com/kmhoo/DataVisualization/blob/gh-pages/homework/homework1.html">Source Code </a>
-        </p>
-    </div>
-
-    <!-- create two check boxes to choose which order to sort the bars -->
-    <div style="text-align:center;">
-        <form name="values">
-            <label><input type="checkbox" name="values"> Sort by values</label>
-        </form>
-        <form name="alpha">
-            <label><input type="checkbox" name="alpha"> Sort alphabetically</label>
-        </form>
-    </div>
-    <div class="row", style="text-align:center;">
-
-        <div class="col-md-3"></div>
-
-        <div class="col-md-3">
-            <!-- create a search box to update the query string and redo the chart -->
-            <p>Fill in below to regenerate a new chart</p>
-            <input type='text' id='gen_id' onfocus="javascript: if(this.value != ''){ this.value = ''; }">
-            <input type='button' id='gen' value='Regenerate' onClick="generate(0); document.getElementById('add_id').value = ''; ">
-        </div>
-        <div class="col-md-3">
-            <p>Fill in below to add letters to current chart</p>
-            <input type='text' id='add_id' onfocus="javascript: if(this.value != ''){ this.value = ''; }">
-            <input type='button' id='add' value='Add Letters' onClick='generate(1)'>
+        <div id="tooltip" class="hidden">
+            <p><span id="value">100</span></p>
         </div>
 
-        <div class="col-md-3"></div>
-    </div>
+        <div style="text-align:center;">
+            <h1>Homework #1: Letter Count Bar Chart</h1>
+            <p> 
+                This homework counts the letters entered in the query string of the URL or in the text box, and displays a bar chart of those counts.
+                <br>
+                <b>Please enter a query string after the URL (e.g. ?HelloWorld) or enter string into text box to regenerate the chart.</b>
+                <br>
+                Kailey Hoo: <a href="https://github.com/kmhoo/DataVisualization/blob/gh-pages/homework/homework1.html">Source Code </a>
+            </p>
+        </div>
+
+        <!-- create two check boxes to choose which order to sort the bars -->
+        <div style="text-align:center;">
+            <form name="values">
+                <label><input type="checkbox" name="values"> Sort by values</label>
+            </form>
+            <form name="alpha">
+                <label><input type="checkbox" name="alpha"> Sort alphabetically</label>
+            </form>
+        </div>
+        <div class="row", style="text-align:center;">
+
+            <div class="col-md-2"></div>
+
+            <div class="col-md-4">
+                <!-- create a search box to update the query string and redo the chart -->
+                <p>Fill in below to regenerate a new chart</p>
+                <input type='text' id='gen_id' onfocus="javascript: if(this.value != ''){ this.value = ''; }">
+                <input type='button' id='gen' value='Regenerate' onClick="generate(0); document.getElementById('add_id').value = ''; ">
+            </div>
+            <div class="col-md-4">
+                <p>Fill in below to add letters to current chart</p>
+                <input type='text' id='add_id' onfocus="javascript: if(this.value != ''){ this.value = ''; }">
+                <input type='button' id='add' value='Add Letters' onClick='generate(1)'>
+            </div>
+
+            <div class="col-md-2"></div>
+        </div>
 
     <!-- Import d3 -->
     <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -285,7 +286,7 @@
             d3.selectAll("svg").remove();
 
             // create SVG element with width height, and changing where the origin is
-            var svg = d3.select("body")
+            var svg = d3.select("#chart")
                         .append("svg")
                         .attr("width", width + margin.left + margin.right)
                         .attr("height", height + margin.top + margin.bottom)
@@ -518,7 +519,6 @@
     </div>
 </div>
 
-<div>
 <hr/>
 
 <footer>
