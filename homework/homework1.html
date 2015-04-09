@@ -105,19 +105,19 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">MSAN 622</a>
+            <a class="navbar-brand" href="http://kmhoo.github.io/DataVisualization/">MSAN 622</a>
         </div>
 
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="#homework">Homework</a></li>
-                <li><a href="#project">Project</a></li>
-                <li><a href="#participation">Participation</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#homework">Homework</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#project">Project</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#participation">Participation</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#about">About</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#contact">Contact</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -169,228 +169,167 @@
             <div class="col-md-2"></div>
         </div>
 
-    <!-- Import d3 -->
-    <script src="http://d3js.org/d3.v3.min.js"></script>
+        <!-- Import d3 -->
+        <script src="http://d3js.org/d3.v3.min.js"></script>
 
-    <script>
-        // function that grabs the query string for the URL and returns 
-        // a JS object with characters and the counts of each character 
-        var create_object = function(){
-            // grab the query string from the URL using a decodeURI and remove 
-            // all non-alpha characters and make all characters lowercase
-            var string = ((document.getElementById('gen_id').value === "") 
-                    ? decodeURI(window.location.search).toLowerCase() 
-                    : document.getElementById('gen_id').value.toLowerCase())
-            var update_string = string.replace(/[^a-z]/g, "");
+        <script>
+            // function that grabs the query string for the URL and returns 
+            // a JS object with characters and the counts of each character 
+            var create_object = function(){
+                // grab the query string from the URL using a decodeURI and remove 
+                // all non-alpha characters and make all characters lowercase
+                var string = ((document.getElementById('gen_id').value === "") 
+                        ? decodeURI(window.location.search).toLowerCase() 
+                        : document.getElementById('gen_id').value.toLowerCase())
+                var update_string = string.replace(/[^a-z]/g, "");
 
-            // set an empty object
-            var char_counter = {};
+                // set an empty object
+                var char_counter = {};
 
-            // for every character in the string count all instances of the 
-            // character add it to the counter object
-            for (var i=0; i<update_string.length; i++) {
-                var character = update_string.charAt(i);
-                if (character in char_counter) {
-                    char_counter[character]++;
-                }
-                else {
-                    char_counter[character]=1;
-                }
-            }
-
-            // log the input text and counts
-            console.log(char_counter);
-
-            // return the object of text and count
-            return char_counter;
-        }
-
-
-        // function that sorts based on the type (alphabetically or by value)
-        var sort_object = function(object, type){
-            // create an array of the all the keys
-            var temp_array = []
-            for (var key in object) {
-                if (object.hasOwnProperty(key)) {
-                    temp_array.push(key);
-                }
-            }
-            // if type is alphabetically, sort the keys
-            if (type === "alpha") {
-                temp_array.sort();
-
-            }
-            // if the type is by value. sort by the value of the keys
-            else {
-                temp_array.sort(function(a,b) {
-                  var a_value = object[a];
-                  var b_value = object[b];
-                  return ((a_value < b_value) ? 1 : ((a_value > b_value) ? -1 : 0));
-                });
-            }
-            // reorganize the object in the order of the sort type
-            var temp_obj = {};
-            for (var i=0; i<temp_array.length; i++) {
-                temp_obj[temp_array[i]] = object[temp_array[i]];
-            }
-
-            // // log the input text and counts
-            // console.log('Update:',temp_obj);
-
-            // return the new object of text and count
-            return temp_obj;
-        }
-
-
-        // function to draw the chart using the data that is being passed through
-        function draw_chart(counter, new_letters){
-
-            // create object of objects 
-            var data = d3.entries(counter);
-
-            // padding for the bar chart
-            var barPadding = 5;
-
-            // get the max value of the counts for bar height
-            var max_value = d3.max(data, function(d) {return d.value;});
-
-            // array of vowels
-            var vowels = ['a', 'e', 'i', 'o', 'u'];
-            
-            // margins for the plotting area
-            var margin = {top: 20, right: 20, bottom: 30, left: 40},
-                width = 800 - margin.left - margin.right,
-                height = 450 - margin.top - margin.bottom;
-
-            // scales for both of the axes
-            // x-axis is orginal and y-axis is linear
-            var xScale = d3.scale.ordinal()
-                                 .domain(data.map(function(d) {return d.key;}))
-                                 .rangeRoundBands([0, width], 0.1);
-
-            var yScale = d3.scale.linear()
-                                 .domain([0, max_value])
-                                 .range([height, 0]);
-
-            // axes based on scales
-            var xAxis = d3.svg.axis()
-                              .scale(xScale)
-                              .orient("bottom");
-
-            var yAxis = d3.svg.axis()
-                              .scale(yScale)
-                              .orient("left")
-                              .ticks(Math.min(12, max_value))
-                              .tickFormat(d3.format('.0f'));
-
-            d3.selectAll("svg").remove();
-
-            // create SVG element with width height, and changing where the origin is
-            var svg = d3.select("#chart")
-                        .append("svg")
-                        .attr("width", width + margin.left + margin.right)
-                        .attr("height", height + margin.top + margin.bottom)
-                        .append("g")
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            // add x axis to svg
-            svg.append("g")
-               .attr("class", "x axis")
-               .attr("transform", "translate(0," + height + ")")
-               .call(xAxis); 
-
-            // add y axis to svg and label
-            svg.append("g")
-               .attr("class", "y axis")
-               .call(yAxis)
-               .append("text")
-               .attr("transform", "rotate(-90) translate(-10, 0)")
-               .attr("y", 6)
-               .attr("dy", ".71em")
-               .style("text-anchor", "end")
-               .text("Count");
-
-            // Horizontal grid lines (B level functionality)
-            svg.selectAll("line.horizontalGrid").data(yScale.ticks(max_value)).enter()
-               .append("line")
-               .attr("class", "horizontalGrid")
-               .attr("x1", 1)
-               .attr("x2", width)
-               .attr("y1", function(d){ return yScale(d);})
-               .attr("y2", function(d){ return yScale(d);})
-               .attr("fill", "none")
-               .attr("shape-rendering", "crispEdges")
-               .attr("stroke", "LightGray")
-               .attr("stroke-width", "1px");
-
-            // add bar chart using rect to svg
-            var bars = svg.selectAll(".bar")
-               .data(data)
-               .enter()
-               .append("rect");
-
-            bars.attr("class", function(d){
-                if(new_letters.indexOf(d.key) != -1){
-                        return "letters";
-                }
-                else {
-                    if(vowels.indexOf(d.key) != -1){
-                        return "vowel";
-                    } 
-                    else {
-                        return "bar";
-                    }
-                }})
-                .attr("x", function(d) {return xScale(d.key);})
-
-                .attr("width", xScale.rangeBand())
-                .attr("y", height)
-                .attr("height", 0)
-                .style("fill-opacity", 0)
-                .transition()
-                .duration(1500)
-                .delay(function(d, i) { return i * 500; })
-                .attr("y", function(d) {return yScale(d.value);})
-                .attr("height", function(d) {return height - yScale(d.value);})
-                .style("fill-opacity", 1);
-
-                // add labels when hovering over a bar
-            bars.on("mouseover", function(d) {
-                    d3.select("#tooltip").select("#value").text("Count: "+d.value);
-                    d3.select("#tooltip").classed("hidden", false);
-                 })
-                .on("mousemove", function() {
-                    d3.select("#tooltip")
-                      .style("left", (event.pageX + 10) + "px")
-                      .style("top", (event.pageY + 10) + "px")  
-                 })
-                .on("mouseout", function() {d3.select("#tooltip").classed("hidden", true);});
-
-            // change the order of the bars based on the check box clicked
-            d3.selectAll("form").on("click", change); 
-
-            // function to update the values based on the checkbox of which order to sort
-            function change(){
-                // based on the checkbox checked, change the data values to reorder object
-                if (document.forms[1].alpha.checked === true) {
-                    var data = d3.entries(sort_object(counter, "alpha"));
-                }
-                else {
-                    if (document.forms[0].values.checked === true) {
-                        var data = d3.entries(sort_object(counter, "values"));
+                // for every character in the string count all instances of the 
+                // character add it to the counter object
+                for (var i=0; i<update_string.length; i++) {
+                    var character = update_string.charAt(i);
+                    if (character in char_counter) {
+                        char_counter[character]++;
                     }
                     else {
-                        var data = d3.entries(counter);
+                        char_counter[character]=1;
                     }
                 }
-                x0 = xScale.domain(data.map(function(d) {return d.key;}));
 
-                // create a transition between the changes
-                var transition = svg.transition().duration(750);
+                // log the input text and counts
+                console.log(char_counter);
 
-                // update bar order
-                transition.selectAll("rect")
-                   .attr("class", function(d){
+                // return the object of text and count
+                return char_counter;
+            }
+
+
+            // function that sorts based on the type (alphabetically or by value)
+            var sort_object = function(object, type){
+                // create an array of the all the keys
+                var temp_array = []
+                for (var key in object) {
+                    if (object.hasOwnProperty(key)) {
+                        temp_array.push(key);
+                    }
+                }
+                // if type is alphabetically, sort the keys
+                if (type === "alpha") {
+                    temp_array.sort();
+
+                }
+                // if the type is by value. sort by the value of the keys
+                else {
+                    temp_array.sort(function(a,b) {
+                      var a_value = object[a];
+                      var b_value = object[b];
+                      return ((a_value < b_value) ? 1 : ((a_value > b_value) ? -1 : 0));
+                    });
+                }
+                // reorganize the object in the order of the sort type
+                var temp_obj = {};
+                for (var i=0; i<temp_array.length; i++) {
+                    temp_obj[temp_array[i]] = object[temp_array[i]];
+                }
+
+                // // log the input text and counts
+                // console.log('Update:',temp_obj);
+
+                // return the new object of text and count
+                return temp_obj;
+            }
+
+
+            // function to draw the chart using the data that is being passed through
+            function draw_chart(counter, new_letters){
+
+                // create object of objects 
+                var data = d3.entries(counter);
+
+                // padding for the bar chart
+                var barPadding = 5;
+
+                // get the max value of the counts for bar height
+                var max_value = d3.max(data, function(d) {return d.value;});
+
+                // array of vowels
+                var vowels = ['a', 'e', 'i', 'o', 'u'];
+                
+                // margins for the plotting area
+                var margin = {top: 20, right: 20, bottom: 30, left: 40},
+                    width = 800 - margin.left - margin.right,
+                    height = 450 - margin.top - margin.bottom;
+
+                // scales for both of the axes
+                // x-axis is orginal and y-axis is linear
+                var xScale = d3.scale.ordinal()
+                                     .domain(data.map(function(d) {return d.key;}))
+                                     .rangeRoundBands([0, width], 0.1);
+
+                var yScale = d3.scale.linear()
+                                     .domain([0, max_value])
+                                     .range([height, 0]);
+
+                // axes based on scales
+                var xAxis = d3.svg.axis()
+                                  .scale(xScale)
+                                  .orient("bottom");
+
+                var yAxis = d3.svg.axis()
+                                  .scale(yScale)
+                                  .orient("left")
+                                  .ticks(Math.min(12, max_value))
+                                  .tickFormat(d3.format('.0f'));
+
+                d3.selectAll("svg").remove();
+
+                // create SVG element with width height, and changing where the origin is
+                var svg = d3.select("#chart")
+                            .append("svg")
+                            .attr("width", width + margin.left + margin.right)
+                            .attr("height", height + margin.top + margin.bottom)
+                            .append("g")
+                            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                // add x axis to svg
+                svg.append("g")
+                   .attr("class", "x axis")
+                   .attr("transform", "translate(0," + height + ")")
+                   .call(xAxis); 
+
+                // add y axis to svg and label
+                svg.append("g")
+                   .attr("class", "y axis")
+                   .call(yAxis)
+                   .append("text")
+                   .attr("transform", "rotate(-90) translate(-10, 0)")
+                   .attr("y", 6)
+                   .attr("dy", ".71em")
+                   .style("text-anchor", "end")
+                   .text("Count");
+
+                // Horizontal grid lines (B level functionality)
+                svg.selectAll("line.horizontalGrid").data(yScale.ticks(max_value)).enter()
+                   .append("line")
+                   .attr("class", "horizontalGrid")
+                   .attr("x1", 1)
+                   .attr("x2", width)
+                   .attr("y1", function(d){ return yScale(d);})
+                   .attr("y2", function(d){ return yScale(d);})
+                   .attr("fill", "none")
+                   .attr("shape-rendering", "crispEdges")
+                   .attr("stroke", "LightGray")
+                   .attr("stroke-width", "1px");
+
+                // add bar chart using rect to svg
+                var bars = svg.selectAll(".bar")
+                   .data(data)
+                   .enter()
+                   .append("rect");
+
+                bars.attr("class", function(d){
                     if(new_letters.indexOf(d.key) != -1){
                             return "letters";
                     }
@@ -402,128 +341,192 @@
                             return "bar";
                         }
                     }})
-                   .attr("x", function(d) {return xScale(d.key);})
-                   .attr("y", function(d) {return yScale(d.value);})
-                   .attr("height", function(d) {return height - yScale(d.value);})
+                    .attr("x", function(d) {return xScale(d.key);})
 
-                // update axis to correspond to the x values
-                transition.select(".x.axis")
-                    .call(xAxis)
-                  .selectAll("g");
-            };
-                            
-        }
+                    .attr("width", xScale.rangeBand())
+                    .attr("y", height)
+                    .attr("height", 0)
+                    .style("fill-opacity", 0)
+                    .transition()
+                    .duration(1500)
+                    .delay(function(d, i) { return i * 500; })
+                    .attr("y", function(d) {return yScale(d.value);})
+                    .attr("height", function(d) {return height - yScale(d.value);})
+                    .style("fill-opacity", 1);
 
-        // function that adds letters to current chart
-        function add_letters(counter, new_letters) {
-            var letters = new_letters.replace(/[^a-z]/g, "")
-            // for every character in the string count all instances of the 
-            // character add it to the counter object
-            for (var i=0; i<letters.length; i++) {
-                var character = letters.charAt(i);
-                if (character in counter) {
-                    counter[character]++;
-                }
-                else {
-                    counter[character]=1;
-                }
+                    // add labels when hovering over a bar
+                bars.on("mouseover", function(d) {
+                        d3.select("#tooltip").select("#value").text("Count: "+d.value);
+                        d3.select("#tooltip").classed("hidden", false);
+                     })
+                    .on("mousemove", function() {
+                        d3.select("#tooltip")
+                          .style("left", (event.pageX + 10) + "px")
+                          .style("top", (event.pageY + 10) + "px")  
+                     })
+                    .on("mouseout", function() {d3.select("#tooltip").classed("hidden", true);});
+
+                // change the order of the bars based on the check box clicked
+                d3.selectAll("form").on("click", change); 
+
+                // function to update the values based on the checkbox of which order to sort
+                function change(){
+                    // based on the checkbox checked, change the data values to reorder object
+                    if (document.forms[1].alpha.checked === true) {
+                        var data = d3.entries(sort_object(counter, "alpha"));
+                    }
+                    else {
+                        if (document.forms[0].values.checked === true) {
+                            var data = d3.entries(sort_object(counter, "values"));
+                        }
+                        else {
+                            var data = d3.entries(counter);
+                        }
+                    }
+                    x0 = xScale.domain(data.map(function(d) {return d.key;}));
+
+                    // create a transition between the changes
+                    var transition = svg.transition().duration(750);
+
+                    // update bar order
+                    transition.selectAll("rect")
+                       .attr("class", function(d){
+                        if(new_letters.indexOf(d.key) != -1){
+                                return "letters";
+                        }
+                        else {
+                            if(vowels.indexOf(d.key) != -1){
+                                return "vowel";
+                            } 
+                            else {
+                                return "bar";
+                            }
+                        }})
+                       .attr("x", function(d) {return xScale(d.key);})
+                       .attr("y", function(d) {return yScale(d.value);})
+                       .attr("height", function(d) {return height - yScale(d.value);})
+
+                    // update axis to correspond to the x values
+                    transition.select(".x.axis")
+                        .call(xAxis)
+                      .selectAll("g");
+                };
+                                
             }
 
-            // log the input text and counts
-            console.log(counter);
-
-            updated_letters = letters.split("")
-            // draw chart updated
-            draw_chart(counter, updated_letters);
-        }
-
-        // function that generates the chart 
-        function generate(value){
-
-            // set the check boxes and search boxes as variables
-            var valueSort = document.forms[0].values;
-            var alphaSort = document.forms[1].alpha;
-            var addText = document.getElementById('add_id').value;
-            var genText = document.getElementById('gen_id').value;
-
-            // reset both of them to unchecked
-            valueSort.checked = false;
-            alphaSort.checked = false;
-
-            // create the object using function and convert into object of objects
-            var counter = create_object();
-
-            if (value === 1) {
-                add_letters(counter, addText.toLowerCase());
-            }
-            else{
-                // draw the bar chart given the data
-                draw_chart(counter, "");
-            }
-            
-            // only allows to select by one of the check boxes
-            valueSort.onclick = checkClick;
-            alphaSort.onclick = checkClick;
-
-            // function that only allows one check box to be checked at a time
-            function checkClick(e) {
-                var otherCheckbox = this === valueSort ? alphaSort : valueSort;
-                if (this.checked) {
-                    otherCheckbox.checked = false;
+            // function that adds letters to current chart
+            function add_letters(counter, new_letters) {
+                var letters = new_letters.replace(/[^a-z]/g, "")
+                // for every character in the string count all instances of the 
+                // character add it to the counter object
+                for (var i=0; i<letters.length; i++) {
+                    var character = letters.charAt(i);
+                    if (character in counter) {
+                        counter[character]++;
+                    }
+                    else {
+                        counter[character]=1;
+                    }
                 }
-            };
-        }
-        window.onload = generate(0);
-    </script>
-</div>
+
+                // log the input text and counts
+                console.log(counter);
+
+                updated_letters = letters.split("")
+                // draw chart updated
+                draw_chart(counter, updated_letters);
+            }
+
+            // function that generates the chart 
+            function generate(value){
+
+                // set the check boxes and search boxes as variables
+                var valueSort = document.forms[0].values;
+                var alphaSort = document.forms[1].alpha;
+                var addText = document.getElementById('add_id').value;
+                var genText = document.getElementById('gen_id').value;
+
+                // reset both of them to unchecked
+                valueSort.checked = false;
+                alphaSort.checked = false;
+
+                // create the object using function and convert into object of objects
+                var counter = create_object();
+
+                if (value === 1) {
+                    add_letters(counter, addText.toLowerCase());
+                }
+                else{
+                    // draw the bar chart given the data
+                    draw_chart(counter, "");
+                }
+                
+                // only allows to select by one of the check boxes
+                valueSort.onclick = checkClick;
+                alphaSort.onclick = checkClick;
+
+                // function that only allows one check box to be checked at a time
+                function checkClick(e) {
+                    var otherCheckbox = this === valueSort ? alphaSort : valueSort;
+                    if (this.checked) {
+                        otherCheckbox.checked = false;
+                    }
+                };
+            }
+
+            window.onload = generate(0);
 
 
-<div class="row">
-    <div class="col-md-1">
+        </script>
     </div>
 
-    <div class="col-md-5">
-        <h2 class="page-header"><a name="project"></a>Functionality</h2>
 
-        <ul>
-            <li>C-Level</li>
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+
+        <div class="col-md-5">
+            <h2 class="page-header"><a name="project"></a>Functionality</h2>
+
             <ul>
-                <li>Modify the tick label formatting (max tick frequency set to 12)</li>
-                <li>Modify the underlying grid and axis lines (add horizontal grid lines)</li>
-                <li>Modify the bar colors (vowels vs consonants; larger vs smaller than mean</li>
-                <li>Modify the sort order (alphabetically vs by value)</li>
+                <li>C-Level</li>
+                <ul>
+                    <li>Modify the tick label formatting (max tick frequency set to 12, without decimal points)</li>
+                    <li>Modify the underlying grid and axis lines (add horizontal grid lines as well has axes with labels)</li>
+                    <li>Modify the bar colors (vowels vs consonants; larger vs smaller than mean)</li>
+                    <li>Modify the sort order (alphabetically vs by value)</li>
+                </ul>
+                <li>B-Level</li>
+                <ul>
+                    <li>Add buttons that allow you to change between sorting alphabetically and sorting by value (default is order it was typed in)</li>
+                    <li>Add a tooltip that shows the exact value of a bar when hovering over it</li>
+                    <li>Add a search box on the page, and show the letter count for the text in that box instead of from the URL query string</li>
+                </ul>
+                <li>A-Level</li>
+                <ul>
+                    <li>At the start of your visualization, show one bar at a time and smoothly grow each bar from the bottom up to its value</li>
+                    <li>Allow the user to add new text via a search box and button combo, and use transitions to smoothly update the values (can only add text to initial string)</li>
+                </ul>
             </ul>
-            <li>B-Level</li>
+        </div>
+
+        <div class="col-md-5">
+            <h2 class="page-header"><a name="participation"></a>Explanation</h2>
+
             <ul>
-                <li>Add a button that allows you to change between sorting alphabetically and sorting by value</li>
-                <li>Add a tooltip that shows the exact value of a bar when hovering over it.</li>
-                <li>Figure out how to add a search box on the page, and show the letter count for the text in that box instead of from the URL query string</li>
+                <li>I started off by choosin</li>
             </ul>
-            <li>A-Level</li>
-            <ul>
-                <li>At the start of your visualization, show one bar at a time and smoothly grow each bar from the bottom up to its value</li>
-                <li>Allow the user to continue adding new text via a search box and button combo, and use transitions to smoothly update the values</li>
-            </ul>
-        </ul>
+        </div>
+
+        <div class="col-md-1">
+        </div>
     </div>
 
-    <div class="col-md-5">
-        <h2 class="page-header"><a name="participation"></a>Explanation</h2>
+    <hr/>
 
-        <ul>
-            <li>Pending</li>
-        </ul>
-    </div>
-
-    <div class="col-md-1">
-    </div>
-</div>
-
-<hr/>
-
-<footer>
-    <p style="text-align: center;">Kailey Hoo &bullet; MSAN 622 Information Visualization &bullet; Spring 2015</p>
-</footer>
+    <footer>
+        <p style="text-align: center;">Kailey Hoo &bullet; MSAN 622 Information Visualization &bullet; Spring 2015</p>
+    </footer>
 
 </div><!--/.container -->
 
