@@ -366,6 +366,24 @@
                      })
                     .on("mouseout", function() {d3.select("#tooltip").classed("hidden", true);});
 
+                var legend = svg.selectAll(".legend")
+                      .data(range(["consonants", "vowels", "added letters"]))
+                    .enter().append("g")
+                      .attr("class", "legend")
+                      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+                legend.append("rect")
+                      .attr("x", width - 18)
+                      .attr("width", 18)
+                      .attr("height", 18)
+                      .style("fill", range(["#1f78b4", "#33a02c", "#984ea3"]));
+
+                legend.append("text")
+                      .attr("x", width - 24)
+                      .attr("y", 9)
+                      .attr("dy", ".35em")
+                      .style("text-anchor", "end")
+                      .text(function(d) { return d; });
                 // change the order of the bars based on the check box clicked
                 d3.selectAll("form").on("click", change); 
 
@@ -514,7 +532,15 @@
             <h2 class="page-header"><a name="explanation"></a>Explanation</h2>
 
             <ul>
-                <li>Pending</li>
+                <li>
+                    Most of the functionality I implemented was for the clarity of the graph. After figuring out how to create the actual bar chart, I choose colors based on preference. I did not want the colors to be too harsh and also wanted them to be categorical, rather than any sort of gradient. This is why I chose to make blue the main color and green the color for the vowels. I also wanted to be able to distinguish between the original letters and the ones that got counts added to them which is why they turn purple. 
+                </li>
+                <li>
+                    Another part of the functionality was the axis and grid lines. I tested many different sizes and fonts for the axes. I did not want them to overpower the chart but I also still wanted them to be readable. This is why I chose the axes to have very thin lines and only 12 ticks max on the y-axis to avoid clutter. Lastly, I ended up adding the grid lines because it was easier to see the values of each of the letters.
+                </li>
+                <li>
+                    The last part of the functionality that I wanted to mention was the check boxes and search boxes that I added. I wanted to make this chart a bit more interactive so that whoever was looking at it could see a couple different views. This is why I added both a sort button for alphabetically and by value. Also, I wanted someone to be able to regenerate the chart with new letters without having to reload the page.
+                </li>
             </ul>
         </div>
 
