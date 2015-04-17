@@ -78,6 +78,23 @@
             cursor: move;
         }
 
+        .scatter.axis {
+            font-size: 10px
+        }
+        .scatter.axis {
+          shape-rendering: crispEdges;
+        }
+
+        .scatter.axis line {
+          stroke: #fff;
+          stroke-width: .5px;
+
+        }
+
+        .scatter.axis path {
+          display: none;
+
+        }
     </style>
 
 <!-- Fixed Navbar -->
@@ -123,27 +140,28 @@
         <!-- Import d3 -->
         <script src="../js/d3.min.js"></script>
         <script src="../js/colorbrewer.js"></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+<!--         <div style="text-align:center;">
+                <label><input type="checkbox" id="bubble">Bubble Chart</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <label><input type="checkbox" id="scatter">Scatter Plot</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <label><input type="checkbox" id="scatter">Parallel Coordinates</label>
+        </div> -->
         
-        <h2>Bubble Chart</h2>
         <div class="col-lg-12 text-center" id="chartC"> 
-            <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+            <h2>Bubble Chart</h2>
             <script src="hw2/create_bubble.js"></script>
         </div>
-
         
+        <div style="height:20px; position:relative;"></div>
         <h2>Scatterplot Matrix</h2>
         <div class="col-lg-12 text-center" id="chartB"> 
             <script src="hw2/create_scatter.js"></script>
         </div>
 
-<!--         <p>
-            <h2>Small Multiples</h2>
-            <script src="create_multiples.js"></script>
-        </p> -->
-
 
         <h2>Parallel Coordinates</h2>
-        <div class="col-lg-12 text-center" id="chartA"> 
+        <div class="chart-title" id="chartA"> 
             <script src="hw2/create_parallel.js"></script>
         </div>
 

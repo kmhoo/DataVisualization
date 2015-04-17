@@ -44,7 +44,7 @@ d3.csv("hw2/state.csv", function(error, data) {
 
     // json of dimensions and adjusted titles
     var cols = {"name": "State", "population": "Population", "life_expectancy": "Life Expectancy", "income": "Income", 
-                "illiteracy": "Illiteracy", "murders": "Murders", "hs_grad": "HS Graduates",
+                "illiteracy": "Illiteracy", "murders": "Murders", "hs_grad": "HS Grad Rate",
                 "days_frost": "Days w/ Frost", "land_area": "Land Area"}
 
     // list of dimensions and create scale for each (excluding all categorical data but state name)
@@ -145,15 +145,15 @@ d3.csv("hw2/state.csv", function(error, data) {
 
     // add color to the circles
     legend.append('rect')
-          .attr('width', 20)
-          .attr('height', 20)
+          .attr('width', 40)
+          .attr('height', 2)
           .style('fill', function(d) { return d.value; })
-          .style('opacity', .95)
-          .style('stroke', 'black');
+          .style("text-anchor", "middle")
+          .style('opacity', .95);
 
     // add the region name
     legend.append('text')
-          .attr('x', 25)
+          .attr('x', 15)
           .attr('y', 15)
           .text(function(d) { return d.key; });
 

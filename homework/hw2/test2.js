@@ -82,6 +82,8 @@ d3.json("/hw2/statex77.json", function(data) {
       .style("fill-opacity", .5)
       .attr("pointer-events", "none");
 
+
+  // code that lets you brush over certain points
   d3.select(window)
       .on("mousemove", mousemove)
       .on("mouseup", mouseup);
@@ -112,8 +114,7 @@ d3.json("/hw2/statex77.json", function(data) {
         miny = Math.min(x0[1], x1[1]),
         maxy = Math.max(x0[1], x1[1]);
 
-    rect
-        .attr("x", minx - .5)
+    rect.attr("x", minx - .5)
         .attr("y", miny - .5)
         .attr("width", maxx - minx + 1)
         .attr("height", maxy - miny + 1);
@@ -127,7 +128,7 @@ d3.json("/hw2/statex77.json", function(data) {
         maxt = y.invert(size - miny);
 
     count = 0;
-    svg.selectAll("circle")
+    svgB.selectAll("circle")
         .style("fill", function(d) {
           return mins <= d.y[v.x] && maxs >= d.y[v.x]
               && mint <= d.y[v.y] && maxt >= d.y[v.y]
@@ -136,22 +137,25 @@ d3.json("/hw2/statex77.json", function(data) {
         });
   }
 
-  function mouseup() {
-    if (!rect) return;
-    rect.remove();
-    rect = null;
+	  function mouseup() {
+	    if (!rect) return;
+	    rect.remove();
+	    rect = null;
 
-    if (!count) svg.selectAll("circle")
-        .style("fill", function(d) {
-          return color(d.y.species);
-        });
-  }
+	    if (!count) svgB.selectAll("circle")
+	        			.style("fill", function(d) {
+				          	return colorScale(d.region);
+				        });
+	  }
 
-});
+// function to 
 function cross(a) {
-  return function(d) {
-    var c = [];
-    for (var i = 0, n = a.length; i < n; i++) c.push({x: d, y: a[i]});
-    return c;
-  };
+	return function(d) {
+		var c = [];
+		for (var i = 0, n = a.length; i < n; i++) c.push({x: d, y: a[i]});
+		return c;
+	};
 }
+
+})
+

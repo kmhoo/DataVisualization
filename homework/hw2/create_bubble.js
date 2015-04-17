@@ -6,7 +6,7 @@ function color(d) { return d.region; }
 function key(d) { return d.abb; }
 
 // create margins for svg
-var margin = {top: 20, right: 50, bottom: 40, left: 50},
+var margin = {top: 20, right: 50, bottom: 50, left: 50},
     width = 900 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom;
 
@@ -70,7 +70,7 @@ svg.append("text")
     .attr("x", width/2)
     .attr("y",  height + margin.bottom)
     .style("text-anchor", "middle")
-    .text("Murders");
+    .text("Murders per 100K");
 
 // add y axis
 svg.append("g")
@@ -120,17 +120,16 @@ d3.json("hw2/statex77.json", function(data) {
                     });
 
     // fill circles with colors
-    legend.append('rect')
-          .attr('width', 20)
-          .attr('height', 20)
+    legend.append('circle')
+          .attr('r',7)
           .style('fill', function(d) { return d.value; })
           .style('opacity', .95)
           .style('stroke', 'black');
 
     // add the region name
     legend.append('text')
-          .attr('x', 25)
-          .attr('y', 15)
+          .attr('x', 15)
+          .attr('y', 5)
           .text(function(d) { return d.key; });
 
     // function to return the position of the circle
@@ -154,4 +153,5 @@ d3.json("hw2/statex77.json", function(data) {
         return colors
     }
 })
+
 

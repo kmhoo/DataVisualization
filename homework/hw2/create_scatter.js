@@ -1,113 +1,167 @@
+// set size of each plot and padding
+var size = 150;
+var padding = 15;
+var n = 5;
+var marginB = 150;
 
-var marginB = {top: 20, right: 50, bottom: 50, left: 50};
+// create the color scale by region
+var colorScale = d3.scale.ordinal()
+                         .range(colorbrewer.Set2[4]);
 
-var widthB = 1000,
-    sizeB = 170,
-    paddingB = 15;
+// create svg for b level functionality
+var svgB = d3.select("#chartB")
+             .append("svg")
+             .attr("width", size * n + 2 * padding + marginB)
+             .attr("height", size * n + 2 * padding)
+             .append("g")
+             .attr("transform", "translate(" + padding / 2 + "," + padding / 2 + ")");
 
-var xScaleB = d3.scale.linear()
-               .range([paddingB / 2, sizeB - paddingB / 2]);
+// load data and add to svg
+d3.csv("hw2/state.csv", function(error, data) {
 
-var yScaleB = d3.scale.linear()
-               .range([sizeB - paddingB / 2, paddingB / 2]);
+    // add color into object 
+    data.forEach(function(d){ d.color = colorScale(d.region) })
 
-var xAxisB = d3.svg.axis()
-              .scale(xScaleB)
-              .orient("bottom")
-              .ticks(5);
+    // create empty scales that will be updated for each plot
+    var xScaleB = {};
+    var yScaleB = {};
 
-var yAxisB = d3.svg.axis()
-              .scale(yScaleB)
-              .orient("left")
-              .ticks(5);
-
-var colorB = d3.scale.ordinal()
-              .range(colorbrewer.Set2[4]);
-
-d3.csv("hw2/state.csv", function(data) {
-
-    // var metrics = {"life_expectancy":"", "murders":"", "income":"", "hs_grad":"", "illiteracy": ""}
+    // create array of all variables we want to see in matrix
     var variables = ["life_expectancy", "murders", "income", "hs_grad", "illiteracy"];
 
-        variables.forEach(function(metric) {
-        var value = function(d) { return d[metric]; },
-            domain = [d3.min(data, value), d3.max(data, value)];
-        xScaleB[metric] = d3.scale.linear().domain(domain).nice();
-        yScaleB[metric] = d3.scale.linear().domain(domain).nice();
-    });
+    // create dictionary for renaming
+    var variableRename = {"life_expectancy": "Life Expectancy", "murders": "Murders", "income": "Income", 
+                          "hs_grad": "HS Grad Rate", "illiteracy": "Illiteracy"};
+
+    // create different x and y scales for each variable
+    variables.forEach(function(variable) {
+        data.forEach(function(d) { d[variable] = +d[variable]; });
+        xScaleB[variable] = d3.scale.linear()
+                              .domain(d3.extent(data, function(d) { return d[variable]; }))
+                              .nice()
+                              .range([padding, size - padding]);
+                                        
+        yScaleB[variable] = d3.scale.linear()
+                              .domain(d3.extent(data, function(d) { return d[variable]; }))
+                              .nice()
+                              .range([size - padding, padding]);                                  
+    }); 
+
+    // create the axes
+    var axis = d3.svg.axis()
+                     .ticks(4)
+                     .tickSize(size * n); 
+
+    // create x axis for each plot
+    svgB.selectAll(".x.axis")
+        .data(variables)
+        .enter()
+        .append("g")
+        .attr("class", "scatter x axis")
+        .attr("transform", function(d, i) { return "translate(" + i * size + ",0)"; })
+        .each(function(d)  { d3.select(this).call(axis.scale(xScaleB[d]).orient("bottom")); });
+
+    // create y axis for each plot 
+    svgB.selectAll(".y.axis")
+        .data(variables)
+        .enter()
+        .append("g")
+        .attr("class", "scatter y axis")
+        .attr("transform", function(d, i) { return "translate(0," + i * size + ")"; })
+        .each(function(d) { d3.select(this).call(axis.scale(yScaleB[d]).orient("right"));  });
 
 
-    // var variables = d3.keys(data[0]).filter(function(d) { if (d in metrics){ return d }; });
-    var n = variables.length;
+    // create cell and plots
+    var cell = svgB.selectAll(".cell")
+                   .data(cross(variables, variables))
+                   .enter()
+                   .append("g")
+                   .attr("class", "cell")
+                   .attr("transform", function(d) { return "translate(" + d.i * size + "," + d.j * size + ")"; })
+                   .each(plot);
 
-    // var datadict = {};
-    // variables.forEach(function(i) {
-    //     datadict[i] = d3.extent(data, function(d) { return d[i]; });
-    // });
+    // create titles for the diagonal
+    cell.filter(function(d) { return d.i == d.j; }).append("text")
+        .attr("x", padding)
+        .attr("y", padding)
+        .attr("dy", ".71em")
+        .text(function(d) { return variableRename[d.x]; });
 
-  var svgB = d3.select("#chartB")
-              .append("svg")
-              .attr("width", sizeB * n + paddingB)
-              .attr("height", sizeB * n + paddingB)
-              .append("g")
-              .attr("transform", "translate(" + paddingB + "," + paddingB / 2 + ")");
+    // create objects with region and color
+    var colors = d3.entries(create_colors(data))
 
-  svgB.selectAll(".x.axis")
-      .data(variables)
-    .enter().append("g")
-      .attr("class", "x axis")
-      .attr("transform", function(d, i) { return "translate(" + i * sizeB + ",0)"; })
-      .each(function(d) { d3.select(this).call(xAxisB); });
+    // create a legend for color and region
+    var legend = svgB.selectAll('.legend')
+                    .data(colors)
+                    .enter()
+                    .append('g')
+                    .attr('class', 'legend')
+                    .attr('transform', function(d, i) { 
+                        return 'translate(' + (size * n + 2 * padding) + ',' + (i * 25) + ')';
+                    });
 
-  svgB.selectAll(".y.axis")
-      .data(variables)
-    .enter().append("g")
-      .attr("class", "y axis")
-      .attr("transform", function(d, i) { return "translate(0," + i * sizeB + ")"; })
-      .each(function(d) { d3.select(this).call(yAxisB); });
+    // fill circles with colors
+    legend.append('circle')
+          .attr('r',7)
+          .style('fill', function(d) { return d.value; })
+          .style('opacity', .95)
+          .style('stroke', 'black');
 
-  var cell = svgB.selectAll(".cell")
-      .data(cross(variables, variables))
-    .enter().append("g")
-      .attr("class", "cell")
-      .attr("transform", function(d) { return "translate(" + (n - d.i - 1) * sizeB + "," + d.j * sizeB + ")"; })
-      .each(plot);
+    // add the region name
+    legend.append('text')
+          .attr('x', 15)
+          .attr('y', 5)
+          .text(function(d) { return d.key; });
 
-  // Titles for the diagonal.
-  cell.filter(function(d) { return d.i === d.j; }).append("text")
-      .attr("x", paddingB)
-      .attr("y", paddingB)
-      .attr("dy", ".71em")
-      .text(function(d) { return d.x; });
+    // function to return the position of the circle
+    function position(dot) {
+    dot.attr("cx", function(d) { return xScale(x(d)); })
+       .attr("cy", function(d) { return yScale(y(d)); })
+       .attr("r", function(d) { return radiusScale(radius(d)); });
+    }
 
-  function plot(p) {
-    var cell = d3.select(this);
+    // function to create all the scatter plots
+    function plot(p) {
+      var cell = d3.select(this);
 
-    // xScaleB.domain(datadict[p.x]).nice();
-    // yScaleB.domain(datadict[p.y]).nice();
+      // create plot frame
+      cell.append("rect")
+          .attr("class", "frame")
+          .attr("opacity", "1")
+          .attr("x", padding / 2)
+          .attr("y", padding / 2)
+          .attr("width", size - padding)
+          .attr("height", size - padding);
 
-    cell.append("rect")
-        .attr("class", "frame")
-        .attr("x", paddingB / 2)
-        .attr("y", paddingB / 2)
-        .attr("width", sizeB - paddingB)
-        .attr("height", sizeB - paddingB)
-        .style("stroke", "#9999");
+      // create points in each frame
+      cell.selectAll("circle")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("class", function(d) { return d.region; })
+          .attr("cx", function(d) { return xScaleB[p.x](d[p.x]); })
+          .attr("cy", function(d) { return yScaleB[p.y](d[p.y]); })
+          .attr("r", 3)
+          .attr("opacity", "0.8")
+          .attr("fill", function(d) { return colorScale(d.region); })
+          .attr("stroke", "#000");
 
-    cell.selectAll("circle")
-        .data(data)
-      .enter().append("circle")
-        .attr("cx", function(d) { return xScaleB(d[p.x]); })
-        .attr("cy", function(d) { return yScaleB(d[p.y]); })
-        .attr("r", 3)
-        .style("fill", function(d) { return colorB(d.region); });
-  }
+    }
 
-  function cross(a, b) {
-    var c = [], n = a.length, m = b.length, i, j;
-    for (i = -1; ++i < n;) for (j = -1; ++j < m;) c.push({x: a[i], i: i, y: b[j], j: j});
-    return c;
-  }
+    // create object of colors and regions
+    function create_colors(data) {
+        colors = {}
+        for  (var i = 0; i < data.length; i++) {
+            colors[data[i].region] = data[i].color;
+        };
+        return colors
+    }
 
-  // d3.select(self.frameElement).style("height", sizeB * n + paddingB + 20 + "px");
-});
+    // function to show cross product of all variables
+    function cross(a, b) {
+      var c = [], n = a.length, m = b.length, i, j;
+      for (i = -1; ++i < n;) for (j = -1; ++j < m;) c.push({x: a[i], i: i, y: b[j], j: j});
+      return c;
+    }
+
+  })
