@@ -78,34 +78,6 @@
             cursor: move;
         }
 
-        .d3-tip {
-            line-height: 1;
-            padding: 12px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            border-radius: 2px;
-        }
-
-        /* Creates a small triangle extender for the tooltip */
-        .d3-tip:after {
-            box-sizing: border-box;
-            display: inline;
-            font-size: 10px;
-            width: 100%;
-            line-height: 1;
-            color: rgba(0, 0, 0, 0.8);
-            content: "\25BC";
-            position: absolute;
-            text-align: center;
-        }
-
-        /* Style northward tooltips differently */
-        .d3-tip.n:after {
-            margin: -1px 0 0 0;
-            top: 100%;
-            left: 0;
-        }
-
     </style>
 
 <!-- Fixed Navbar -->
@@ -155,12 +127,15 @@
         <h2>Bubble Chart</h2>
         <div class="col-lg-12 text-center" id="chartC"> 
             <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-            <script src="create_bubble.js"></script>
+            <script src="hw2/create_bubble.js"></script>
         </div>
 
         
-            <!-- <h2>Scatterplot Matrix</h2> -->
-        <!-- <script src="create_scatter.js"></script> -->
+        <h2>Scatterplot Matrix</h2>
+        <div class="col-lg-12 text-center" id="chartB"> 
+            <script src="hw2/create_scatter.js"></script>
+        </div>
+
 <!--         <p>
             <h2>Small Multiples</h2>
             <script src="create_multiples.js"></script>
@@ -169,7 +144,7 @@
 
         <h2>Parallel Coordinates</h2>
         <div class="col-lg-12 text-center" id="chartA"> 
-            <script src="test.js"></script>
+            <script src="hw2/create_parallel.js"></script>
         </div>
 
     </div>
@@ -185,15 +160,15 @@
             <ul>
                 <li>C-Level</li>
                 <ul>
-                    <li>Pending</li>
+                    <li>Bubble Chart</li>
                 </ul>
                 <li>B-Level</li>
                 <ul>
-                    <li>Pending</li>
+                    <li>Scatter Plot</li>
                 </ul>
                 <li>A-Level</li>
                 <ul>
-                    <li>Pending</li>
+                    <li>Parallel Coordinates</li>
                 </ul>
             </ul>
 
