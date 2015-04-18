@@ -104,7 +104,7 @@ d3.csv("hw2/state.csv", function(error, data) {
     legend.append('circle')
           .attr('r',7)
           .style('fill', function(d) { return d.value; })
-          .style('opacity', .95)
+          .style('opacity', .9)
           .style('stroke', 'black');
 
     // add the region name
@@ -142,7 +142,7 @@ d3.csv("hw2/state.csv", function(error, data) {
           .attr("cx", function(d) { return xScaleB[p.x](d[p.x]); })
           .attr("cy", function(d) { return yScaleB[p.y](d[p.y]); })
           .attr("r", 3)
-          .attr("opacity", "0.8")
+          .attr("opacity", 0.5)
           .attr("fill", function(d) { return colorScale(d.region); })
           .attr("stroke", "#000");
 

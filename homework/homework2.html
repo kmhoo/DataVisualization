@@ -176,17 +176,35 @@
             <h2 class="page-header"><a name="functionality"></a>Functionality</h2>
 
             <ul>
-                <li>C-Level</li>
+                <li>Basic</li>
                 <ul>
                     <li>Bubble Chart</li>
+                    <ul>
+                        <li>Population is the size of the bubbles</li>
+                        <li>Changed the colors of the bubbles to be the color of the region</li>
+                        <li>Added a legend to be able to map each color to the region</li>
+                    </ul>
                 </ul>
-                <li>B-Level</li>
+                <li>Moderate</li>
                 <ul>
                     <li>Scatter Plot</li>
+                    <ul>
+                        <li>Hid the grid lines to avoid clutter</li>
+                        <li>Expanded the frame so no points were outside of area</li>
+                        <li>Changed the colors of the points to be the color of the region</li>
+                        <li>Added a legend to map each color to each region</li>
+                    </ul>
                 </ul>
-                <li>A-Level</li>
+                <li>Advanced</li>
                 <ul>
                     <li>Parallel Coordinates</li>
+                    <ul>
+                        <li>Included State in the beginning to show which line is which</li>
+                        <li>Included a brushing option for the rest of the coordinates to highlight specific ones</li>
+                        <li>Changed the labels to be more readable</li>
+                        <li>Changed the colors of the lines to be the color of the region</li>
+                        <li>Added a legend to map each color to each region</li>
+                    </ul>
                 </ul>
             </ul>
 
@@ -197,7 +215,16 @@
 
             <ul>
                 <li>
-                    Pending
+                    Most of what I chose to do was the make the plots look clean and readable. I kept a consistent color palette for each plot so that there wasn't too much variation. I used color brewer for these and chose four categorical colors that were soft but very distinct. With this, I also made sure to include a legend for each of the plots that I created.
+                </li>
+                <li>
+                    For the bubble chart, I chose to plot the life expectancy asking the murder rate. As expected, we see that life expectancy is higher with a lower murder rate. The population levels vary, but it seems that the larger populations have higher murder rates compared to the smaller populations. The colors of the regions are also a good distinction to show that the southern region has higher murder rates. Because I was able to get these insights from the chart, I was very pleased with the variables that I chose. 
+                </li>
+                <li>
+                    For the scatterplot, the biggest difficulty was dealing with the tick marks and grid lines. I wanted to avoid any grid lines because it would create clutter in the plots. Also, I had the points have opacity so that we could see the overlap between them.
+                </li>
+                <li>
+                    Lastly, for the parallel coordinates, I wanted to make sure that we knew which line was which so I started with State at the beginning. I also kept the line colors the same as the other two plots (by region) for consistency. The last thing that was added was the brush effect on the coordinates to highlight the specific lines that passed through it. This was to be able to pinpoint the values of certain states and not get lost in the clutter.
                 </li>
             </ul>
         </div>
