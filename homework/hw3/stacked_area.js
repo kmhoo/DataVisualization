@@ -204,39 +204,39 @@ d3.csv("hw3/seatbelt_chart1.csv", function(error, data) {
           .attr('y', 10)
           .text(function(d) { return d.key; });
 
-    // add dots for each point for the hover
-    dots2 = svg2.selectAll(".dots")
-                .data(seatbelts)
-                .enter()
-                .append("g")
-                .style("fill", function(d) { return colorScaleH(d.name);})
-                .attr("class", "points")
-                .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");;
+    // // add dots for each point for the hover
+    // dots2 = svg2.selectAll(".dots")
+    //             .data(seatbelts)
+    //             .enter()
+    //             .append("g")
+    //             .style("fill", function(d) { return colorScaleH(d.name);})
+    //             .attr("class", "points")
+    //             .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");;
 
-    // show the points on a mouseover
-    dots2.selectAll(".point")
-         .data(function(d) {return d.values; })
-         .enter()
-         .append("circle")
-         .attr("class", "dot")
-         .attr("cx", function(d) { return xScale1(d.date); }) 
-         .attr("cy", function(d) { return yScale1(d.y0 + d.y); }) 
-         .attr("r", 5)
-         .style("opacity", 1)
-         .on("mouseover", function(d) {
-             tooltip.transition()
-                    .style("opacity",1);
-             tooltip.html("<span><b>Killed or seriously injured</b>: " + format(d.y) +" </span><br>" +
-                          "<span><b>Month</b>: " + monthName(d.date) + "</span><br>" +
-                          "<span><b>Year</b>: " + d.date.getFullYear() + "</span><br>")
-                   .style("left", (event.pageX + 15) + "px")     
-                   .style("top", (event.pageY - 20) + "px"); 
-            d3.select(this).style("opacity", 0.9); 
-          })
-         .on("mouseout", function(d){
-            tooltip.transition()
-                   .style("opacity", 0);
-            d3.select(this).style("opacity", 0); });
+    // // show the points on a mouseover
+    // dots2.selectAll("point")
+    //      .data(function(d) {return d.values; })
+    //      .enter()
+    //      .append("circle")
+    //      .attr("class", "dot")
+    //      .attr("cx", function(d) { return xScale1(d.date); }) 
+    //      .attr("cy", function(d) { return yScale1(d.y0 + d.y); }) 
+    //      .attr("r", 5)
+    //      .style("opacity", 1)
+    //      .on("mouseover", function(d) {
+    //          tooltip.transition()
+    //                 .style("opacity",1);
+    //          tooltip.html("<span><b>Killed or seriously injured</b>: " + format(d.y) +" </span><br>" +
+    //                       "<span><b>Month</b>: " + monthName(d.date) + "</span><br>" +
+    //                       "<span><b>Year</b>: " + d.date.getFullYear() + "</span><br>")
+    //                .style("left", (event.pageX + 15) + "px")     
+    //                .style("top", (event.pageY - 20) + "px"); 
+    //         d3.select(this).style("opacity", 0.9); 
+    //       })
+    //      .on("mouseout", function(d){
+    //         tooltip.transition()
+    //                .style("opacity", 0);
+    //         d3.select(this).style("opacity", 0); });
 })
 
 // function for brushing
@@ -244,8 +244,8 @@ function brushed() {
     xScale1.domain(brush.empty() ? xScale2.domain() : brush.extent());
     focus.selectAll("path.focus").attr("d", function(d) { return area1(d.values);});
     focus.select(".x.axis").call(xAxis1);
-    dots2.selectAll("dot").attr("cx", function(d) { return xScale1(d.date); }) 
-         .attr("cy", function(d) { return yScale1(d.y0 + d.y); }); 
+    // dots2.selectAll("point.dot").attr("cx", function(d) { return xScale1(d.date); }) 
+    //                             .attr("cy", function(d) { return yScale1(d.y0 + d.y); }); 
 }
 
 // create object of colors and regions

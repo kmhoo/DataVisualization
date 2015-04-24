@@ -144,6 +144,9 @@
         </div>
 
         <div class="col-md-5">
+            <h2 class="page-header"><a name="preprocessing"></a>Data Preprocessing</h2>
+            <p> Before starting my visualizations, I updated the dataset to make it easier to read in and manipulate. First I added back in the month and year with some basic for loops since the data was inaccessible. Then for the charts that I ultimately used, I filtered the dataset for just those columns before writing it out to a csv. <a href="https://github.com/kmhoo/DataVisualization/tree/gh-pages/homework/hw3/hw3.R">Here</a> is the code that I used to do this. </p>
+
             <h2 class="page-header"><a name="functionality"></a>Functionality</h2>
 
             <ul>
@@ -170,7 +173,7 @@
                 <ul>
                     <li>Details on Demand (tooltip)</li>
                     <ul>
-                        <li> Added tooltips to both of the chart </li>
+                        <li> Added tooltips to both of the chart (Removed from stacked area once brushing was implemented) </li>
                         <li> Shows point when hovered over it </li>
                         <li> Shows number of deaths/injuries, month, and year </li>
                     </ul>
@@ -188,21 +191,45 @@
                         <li> Along with panning, can select the data you want to see and top chart adjusts accordingly </li>
                     </ul>
                     <li>Filtering</li>
+                    <ul>
+                        <li>Pending</li>
+                    </ul>
                 </ul>
             </ul>
 
         </div>
 
         <div class="col-md-5">
-            <h2 class="page-header"><a name="preprocessing"></a>Data Preprocessing</h2>
-            <p> Before starting my visualizations, I updated the dataset to make it easier to read in and manipulate. First I added back in the month and year with some basic for loops since the data was inaccessible. Then for the charts that I ultimately used, I filtered the dataset for just those columns before writing it out to a csv. <a href="https://github.com/kmhoo/DataVisualization/tree/gh-pages/homework/hw3/hw3.R">Here</a> is the code that I used to do this. </p>
+            <h2 class="page-header"><a name="interact"></a>How To Interact</h2>
+            <ul>
+                <li> For the Multi-line Chart:</li>
+                <ul>
+                    <li> Shows all three types of deaths/injuries </li>
+                    <li> Hover over points to see exact number of deaths/injuries for each month and year </li>
+                </ul>
+                <li> For the Stacked Area Chart:</li>
+                <ul>
+                    <li> Shows the cumulative area of deaths/injuries</li>
+                    <li> Use context chart (small one on the bottom) to filter the larger chart </li>
+                    <ul>
+                        <li> Select area that you want to see </li>
+                        <li> Click and drag to see a different portion of the plot </li>
+                        <li> Or drag ends to show more or less data </li>
+                    </ul>
+                </ul>
 
+            </ul>
             <h2 class="page-header"><a name="explanation"></a>Explanation</h2>
 
             <ul>
                 <li>
-                    Pending
+                    For the basic functionality, I originally chose to do a multi-series line chart and an area chart. I first implemented the multi-series line chart because I wanted to be able to see the different number of drivers, front passengers, and rear passengers getting killed or seriously injured. Then I did a simple area chart to understand how area charts works. I plotted the number of kms driven since it was a simple number. However, because this was not very interesting, I went back to the data I used for the multi-series line chart and created a stacked area plot. Lastly, I added a legend to this plot so that we knew which color represented which set of data (keeping the colors consistent between both charts).
                 </li>
+                <li>
+                    For the moderate functionality, I chose to do details on demand and panning. I started with the details on demand and added them to both charts. First, I added points on the lines, with opacity zero. Then on the mouseover, I had them reappear with a pretty big radius so that we can see the circles when we hover. This was so the tooltip would be easy to tell which point we were looking at. On the tooltip, I included the number of deaths/injuries, the month, and the year. For the panning functionality, I added panning to the stacked bar chart. Because this didn't work well with the data points, I removed the tooltip from the stacked area chart to avoid confusion.
+                </li>
+                <li>
+                    Lastly, for the advanced functionality, I added the brushing aspect to the stacked area chart. This enables us to look at specific parts of the plot and be able to zoom in on a year or specific time frame. 
             </ul>
         </div>
 
