@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Homework #3</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <style type="text/css">
+    body {
+        padding-top: 50px;
+        padding-bottom: 20px;
+        padding-left: auto;
+        padding-right: auto;
+    }
+    </style>
+
+</head>
+<body>
+    <!-- create style for the axis lines, text, bars, hovers, and tooltip -->
+    <style type="text/css">
+
+        svg {
+            margin-right: auto;
+            margin-left: auto;
+            margin-bottom: auto;
+            margin-top: auto;
+            display: block;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .area {
+            fill: #386cb0;
+        }
+
+        .line {
+          fill: none;
+          stroke-width: 2px;
+        }
+
+        text {
+            font-size: 10px;
+        }
+
+        .brush .extent {
+            stroke: #fff;
+            fill-opacity: .125;
+            shape-rendering: crispEdges;
+        }
+        .tooltip {
+            background: white;
+            stroke: #fff;
+            opacity: 0.15;
+            position: absolute; 
+            border-radius: 8px;            
+            border: 0px;  
+            width: auto;                  
+            height: auto;                 
+            padding: 2px;
+            box-shadow: 0 0px 2px rgba(0, 0, 0, 0.5);    
+        }
+    </style>
+
+<!-- Fixed Navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://kmhoo.github.io/DataVisualization/">MSAN 622</a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="http://kmhoo.github.io/DataVisualization/#homework">Homework</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#project">Project</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#participation">Participation</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://kmhoo.github.io/DataVisualization/#about">About</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#contact">Contact</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container">
+    <div class="col-lg-12 text-center" id="chart">
+
+        <div style="text-align:center;">
+            <h1>Homework #3: Interactive Time Series Visualization</h1>
+            <p> 
+                You will create two interactive visualizations of the Seatbelts time series for this assignment.
+                <br>
+                Kailey Hoo: <a href="https://github.com/kmhoo/DataVisualization/blob/gh-pages/homework/homework3.html">Source Code </a>
+            </p>
+        </div>
+
+        <!-- Import d3 -->
+        <script src="../js/d3.min.js"></script>
+        <script src="../js/colorbrewer.js"></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+        
+
+        <div class="col-lg-12 text-center" id="chartC"> 
+            <h2>Multi-Series Line</h2>
+            <!-- <p> Uncheck the below to remove from chart</p>
+            <label><input type="checkbox", id='drivers'> Drivers</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <label><input type="checkbox", id='front'> Front</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <label><input type="checkbox", id='rear'> Rear</label> -->
+            <script src="hw3/multi_series.js"></script>
+        </div>
+
+        <div class="col-lg-12 text-center" id="chartC2"> 
+            <h2>Stacked Area Plot</h2>
+            <script src="hw3/stacked_area.js"></script>
+        </div>
+
+        <!-- <div class="col-lg-12 text-center" id="chartC3"> 
+            <h2>Area Plot</h2>
+            <script src="hw3/area.js"></script>
+        </div> -->
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+
+        <div class="col-md-5">
+            <h2 class="page-header"><a name="functionality"></a>Functionality</h2>
+
+            <ul>
+                <li>Basic</li>
+                <ul>
+                    <li>Multi-Series Line Plot</li>
+
+                    <li>Area Plot</li>
+                    <ul>
+                        <li> Plotted the distance driven vs. time as an area plot </li>
+                        <li> This plot is not shown. You can find the source code for it <a href="https://github.com/kmhoo/DataVisualization/tree/gh-pages/homework/hw3/area.js">here</a>.</li>
+                    </ul>
+                    <li>Stacked Area Plot</li>
+                </ul>
+                <li>Moderate</li>
+                <ul>
+                    <li>Pending</li>
+                </ul>
+                <li>Advanced</li>
+                <ul>
+                    <li>Pending</li>
+                </ul>
+            </ul>
+
+        </div>
+
+        <div class="col-md-5">
+            <h2 class="page-header"><a name="explanation"></a>Explanation</h2>
+
+            <ul>
+                <li>
+                    Pending
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-1">
+        </div>
+    </div>
+
+    <hr/>
+
+    <footer>
+        <p style="text-align: center;">Kailey Hoo &bullet; MSAN 622 Information Visualization &bullet; Spring 2015</p>
+    </footer>
+
+</div><!--/.container -->
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/d3.min.js"></script>
+
+
+</body>
+</html>
