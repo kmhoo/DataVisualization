@@ -56,6 +56,15 @@ var tooltip = d3.select("body").append("div")
 
 // load in the data and add to svg
 d3.csv("hw3/seatbelt_chart1.csv", function(error, data) {
+      window.onload = generate(data);
+
+    // window.onload = d3.select("input#drivers").property("checked", true)
+    //                 d3.select("input#front").property("checked", true)
+    //                 d3.select("input#rear").property("checked", true);
+
+})
+
+function generate(data) {
 
     // add color into data
     colorScale.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
@@ -165,9 +174,15 @@ d3.csv("hw3/seatbelt_chart1.csv", function(error, data) {
             tooltip.transition()
                    .style("opacity", 0);
             d3.select(this).style("opacity", 0); });
+}
 
-    // window.onload = d3.select("input#drivers").property("checked", true)
-    //                 d3.select("input#front").property("checked", true)
-    //                 d3.select("input#rear").property("checked", true);
-
-})
+// function filter_year() {
+//     var year = document.getElementById('year').value;
+//     console.log(year);
+//     d3.csv("hw3/seatbelt_chart1.csv", function(error, data) {
+//         console.log(data);
+//         datafilter = data.filter(function(d){console.log(parseDate(d.date).getFullYear()); return parseDate(d.date).getFullYear() === +year});
+//         console.log(datafilter);
+//         generate(datafilter);
+//       })
+// }
