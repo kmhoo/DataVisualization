@@ -70,20 +70,24 @@ var svg2 = d3.select("#chartC2")
              .attr("width", width1 + margin1.left + margin1.right)
              .attr("height", height1 + margin1.top + margin1.bottom)
 
+// add clip range (so brushing/panning do go out of range)
 svg2.append("defs").append("clipPath")
     .attr("id", "clip")
     .append("rect")
     .attr("width", width1)
     .attr("height", height1);
 
+// add chart for the focus (larger chart)
 var focus = svg2.append("g")
                 .attr("class", "focus")
                 .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
 
+// add chart for context to use for panning and brushing
 var context = svg2.append("g")
                   .attr("class", "context")
                   .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
+// create a tooltip for hover
 var tooltip = d3.select("body").append("div")   
     .attr("class", "tooltip")               
     .style("opacity", 0.9);
@@ -107,11 +111,13 @@ d3.csv("hw3/seatbelt_chart1.csv", function(error, data) {
         };
     }));
 
+    // add in the scales for each chart
     xScale1.domain(d3.extent(data.map(function(d) { return d.date; })));
     yScale1.domain([0, 4500]);
     xScale2.domain(xScale1.domain());
     yScale2.domain(yScale1.domain());
 
+    // add the path and area fill for the main chart
     focus.selectAll("path")
          .data(seatbelts)
          .enter()
@@ -121,67 +127,70 @@ d3.csv("hw3/seatbelt_chart1.csv", function(error, data) {
          .attr('class', 'focus')
          .style("fill", function(d) { return colorScale1(d.name); });
 
-
+    // add in the x axis
     focus.append("g")
          .attr("class", "x axis")
          .attr("transform", "translate(0," + height1 + ")")
          .call(xAxis1);
 
+    // add in the y axis
     focus.append("g")
          .attr("class", "y axis")
          .call(yAxis1);
 
     // add y axis label
     focus.append("text")
-        .attr("transform", "rotate(-90) translate(-10, 0)")
-        .attr("y", 0 - margin1.left + 5)
-        .attr("x", 0 - height1/2)
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .text("Number of Deaths");
+         .attr("transform", "rotate(-90) translate(-10, 0)")
+         .attr("y", 0 - margin1.left + 5)
+         .attr("x", 0 - height1/2)
+         .attr("dy", "1em")
+         .style("text-anchor", "middle")
+         .text("Number of Deaths/Injuries");
 
+    // add in path and area for small chart
     context.selectAll("path")
-        .data(seatbelts)
-        .enter()
-        .append("path")
-        .attr('class', 'context')
-       .attr("d", function(d) { return area2(d.values); })
-       .style("fill", function(d) { return colorScale1(d.name); });
+           .data(seatbelts)
+           .enter()
+           .append("path")
+           .attr('class', 'context')
+           .attr("d", function(d) { return area2(d.values); })
+           .style("fill", function(d) { return colorScale1(d.name); });
 
-
+    // add in the x axis
     context.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height2 + ")")
-        .call(xAxis2);
+           .attr("class", "x axis")
+           .attr("transform", "translate(0," + height2 + ")")
+           .call(xAxis2);
 
     // add x axis label
     context.append("text")
-        .attr("x", width1/2)
-        .attr("y",  height2 + margin2.bottom - 5)
-        .style("text-anchor", "middle")
-        .text("Date");
+           .attr("x", width1/2)
+           .attr("y",  height2 + margin2.bottom - 5)
+           .style("text-anchor", "middle")
+           .text("Date");
 
+    // add in the y axis
     context.append("g")
-        .attr("class", "x brush")
-        .call(brush)
-      .selectAll("rect")
-        .attr("y", -6)
-        .attr("height", height2 + 7);
+           .attr("class", "x brush")
+           .call(brush)
+           .selectAll("rect")
+           .attr("y", -6)
+           .attr("height", height2 + 7);
 
     // create objects with region and color
     var colors = d3.entries(create_colors(data))
 
     // create a legend for color and region
     var legend = svg2.selectAll('.legend')
-                    .data(colors)
-                    .enter()
-                    .append('g')
-                    .attr('class', 'legend')
-                    .attr('transform', function(d, i) { 
+                     .data(colors)
+                     .enter()
+                     .append('g')
+                     .attr('class', 'legend')
+                     .attr('transform', function(d, i) { 
                         return 'translate(' + (width + margin1.right) + ',' + (i * 20) + ')';
-                    });
+                      });
 
-    // fill circles with colors
+    // fill rectangles with colors
     legend.append('rect')
           .attr('height', 15)
           .attr("width", 15)
@@ -195,52 +204,48 @@ d3.csv("hw3/seatbelt_chart1.csv", function(error, data) {
           .attr('y', 10)
           .text(function(d) { return d.key; });
 
-    // add dots for each point
+    // add dots for each point for the hover
     dots2 = svg2.selectAll(".dots")
-              .data(seatbelts)
-              .enter()
-              .append("g")
-              .style("fill", function(d) { return colorScaleH(d.name);})
-              .attr("class", "points")
-              .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");;
+                .data(seatbelts)
+                .enter()
+                .append("g")
+                .style("fill", function(d) { return colorScaleH(d.name);})
+                .attr("class", "points")
+                .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");;
 
     // show the points on a mouseover
     dots2.selectAll(".point")
-        .data(function(d) {return d.values; })
-        .enter()
-        .append("circle")
-        .attr("class", "dot")
-        .attr("cx", function(d) { return xScale1(d.date); }) 
-        .attr("cy", function(d) { return yScale1(d.y0 + d.y); }) 
-        .attr("r", 5)
-        .style("opacity", 0)
-        .on("mouseover", function(d) {
-            tooltip.transition()
-                   .style("opacity",1);
-            tooltip.html("<span><b>Killed or seriously injured</b>: " + format(d.y) +" </span><br>" +
+         .data(function(d) {return d.values; })
+         .enter()
+         .append("circle")
+         .attr("class", "dot")
+         .attr("cx", function(d) { return xScale1(d.date); }) 
+         .attr("cy", function(d) { return yScale1(d.y0 + d.y); }) 
+         .attr("r", 5)
+         .style("opacity", 1)
+         .on("mouseover", function(d) {
+             tooltip.transition()
+                    .style("opacity",1);
+             tooltip.html("<span><b>Killed or seriously injured</b>: " + format(d.y) +" </span><br>" +
                           "<span><b>Month</b>: " + monthName(d.date) + "</span><br>" +
                           "<span><b>Year</b>: " + d.date.getFullYear() + "</span><br>")
                    .style("left", (event.pageX + 15) + "px")     
                    .style("top", (event.pageY - 20) + "px"); 
-            d3.select(this).style("opacity", 1); 
+            d3.select(this).style("opacity", 0.9); 
           })
-        .on("mouseout", function(d){
+         .on("mouseout", function(d){
             tooltip.transition()
                    .style("opacity", 0);
             d3.select(this).style("opacity", 0); });
 })
 
-
+// function for brushing
 function brushed() {
     xScale1.domain(brush.empty() ? xScale2.domain() : brush.extent());
     focus.selectAll("path.focus").attr("d", function(d) { return area1(d.values);});
     focus.select(".x.axis").call(xAxis1);
-}
-
-function type(d) {
-    d.date = parseDate(d.date);
-    d.count = +d.count;
-    return d;
+    dots2.selectAll("dot").attr("cx", function(d) { return xScale1(d.date); }) 
+         .attr("cy", function(d) { return yScale1(d.y0 + d.y); }); 
 }
 
 // create object of colors and regions

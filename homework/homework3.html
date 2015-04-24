@@ -150,27 +150,53 @@
                 <li>Basic</li>
                 <ul>
                     <li>Multi-Series Line Plot</li>
-
+                    <ul>
+                        <li> Plotted three line charts with drivers killed or seriously injured, front passengers killed or seriously injured, and rear passengers killed or seriously injured </li>
+                        <li> Made all three lines distinctly different colors </li>
+                        <li> Added labels to the end to see which line is for which set of data </li>
+                    </ul>
                     <li>Area Plot</li>
                     <ul>
                         <li> Plotted the distance driven vs. time as an area plot </li>
                         <li> This plot is not shown. You can find the source code for it <a href="https://github.com/kmhoo/DataVisualization/tree/gh-pages/homework/hw3/area.js">here</a>.</li>
                     </ul>
                     <li>Stacked Area Plot</li>
+                    <ul>
+                        <li> Plotted the area of all people killed or seriously injured and showed the breakdown of drivers, front passengers, and rear passengers </li>
+                        <li> Created a legend to show which was which </li>
+                    </ul>
                 </ul>
                 <li>Moderate</li>
                 <ul>
-                    <li>Pending</li>
+                    <li>Details on Demand (tooltip)</li>
+                    <ul>
+                        <li> Added tooltips to both of the chart </li>
+                        <li> Shows point when hovered over it </li>
+                        <li> Shows number of deaths/injuries, month, and year </li>
+                    </ul>
+                    <li> Panning </li>
+                    <ul>
+                        <li> Added panning on the stacked area chart </li>
+                        <li> Select the area of the amount of points to see, and can scroll back and forth </li>
+                    </ul>
                 </ul>
                 <li>Advanced</li>
                 <ul>
-                    <li>Pending</li>
+                    <li>Brushing</li>
+                    <ul>
+                        <li> Added brushing to the stacked area chart </li>
+                        <li> Along with panning, can select the data you want to see and top chart adjusts accordingly </li>
+                    </ul>
+                    <li>Filtering</li>
                 </ul>
             </ul>
 
         </div>
 
         <div class="col-md-5">
+            <h2 class="page-header"><a name="preprocessing"></a>Data Preprocessing</h2>
+            <p> Before starting my visualizations, I updated the dataset to make it easier to read in and manipulate. First I added back in the month and year with some basic for loops since the data was inaccessible. Then for the charts that I ultimately used, I filtered the dataset for just those columns before writing it out to a csv. <a href="https://github.com/kmhoo/DataVisualization/tree/gh-pages/homework/hw3/hw3.R">Here</a> is the code that I used to do this. </p>
+
             <h2 class="page-header"><a name="explanation"></a>Explanation</h2>
 
             <ul>
