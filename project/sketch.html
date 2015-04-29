@@ -77,27 +77,102 @@
     <h2>Wine Quality Dataset</h2>
     <h4> Red and White variants of the Portuguese "Vinho Verde" wine </h4>
     <center><img class="media-object" align="middle" src="../img/wine.jpg" style="width: 250px; height: 170px;"> </center>
-    </div>
 
+    <br>
+     <h3 class="text-center">Planned Tools</h3>
+        <p> If there is data preprocessing required, I plan to use R. Other than that I plan to use D3 for everything else. </p>
+    </div>
 
     <div class="row">
         <div class="col-md-1">
         </div>
 
         <div class="col-md-5">
-            <h3 class="text-center">Planned Tools</h3>
+            <h3 class="text-center">Planned Techniques</h3>
+            <ul>
+                <li> <b>Bar Chart</b> </li>
+                <ul>
+                    <li> This chart will look at the volume of wines for each quality score and will be a stacked bar chart of both red and white wines </li> 
+                    <li> I am hoping that this chart will show us some skewed distribution of how the wines are classified. If we have a wide variety of wines and an even distribution of quality score, the other metrics (columns) in this dataset will hopefully show us why some wines have a lower/higher quality score. Also, if we see that white/red wines are skewed towards one end of the distribution we will be able to look at what factors of the wine are affecting the score. </li>
+                </ul>
+                <li> <b>Scatter Plot Matrix</b> </li>
+                <ul>
+                    <li> This chart will show relationships between the majority of the columns (fixed acidity, voatile acidity, citric acid, residual sugar, etc). It will also be colored by either quality score or type of wine (depending what the user chooses) </li>
+                    <li> From this chart, we should be able to see some relationships between the different attributes of wine. Hopefully, this will give us some idea for which attributes are highly correlated and hopefully reflect in the quality scores or in the type of wine. Also, being able to choose which metrics we want to see side by side is an option that I am hoping to implement. This way we can see the metrics that we want to see and exclude those that we do not. </li>
+                </ul>
+                <li> <b>Parallel Coordinates</b> </li>
+                <ul>
+                    <li> This chart will show the general trends for each quality score. The first axis will have the quality score and the rest will be attributes like the one listed above. The colors for this chart will indicate the type of wine. </li>
+                    <li> With this chart, I am hoping we can see trends of the types of wines for each quality score. Like the scatter plot matrix, I think it will help us to see relationships between our attributes and be able to show the difference between our white and red wines. </li>
+                </ul>
 
-            <h3 class="text-center">Planned Interaction</h3>
+
         </div>
 
         <div class="col-md-5">
-            <h3 class="text-center">Planned Techniques</h3>
-            
-            <h3 class="text-center">Planned Interface</h3>
+            <h3 class="text-center">Planned Interaction</h3>
+            <ul>
+                <li> <b>For all Charts</b> </li>
+                <ul>
+                    <li> Filtering </li>
+                    <ul>
+                        <li> Type </li>
+                        <ul>
+                            <li> Being able to only look at just red or white wine </li>
+                            <li> Have check boxes to be able to filter </li>
+                        </ul>
+                    </ul>
+                </ul>
+                <li> <b>Bar Chart</b> </li>
+                <ul>
+                    <li> No Additional Interactions </li>
+                </ul>
+                <li> <b>Scatter Plot Matrix</b> </li>
+                <ul>
+                    <li> Filtering </li>
+                    <ul>
+                        <li> Quality </li>
+                        <ul>
+                            <li> Choose the range of quality scores that we want to see and only show points with those values </li>
+                            <li> This will be a slider where you can choose the min and max of your range from 0 to 12 </li>
+                        </ul>
+                        <li> Attributes </li>
+                        <ul>
+                            <li> Being able to select only the attributes that you want to see </li>
+                            <li> Have check boxes for each of the attributes </li>
+                        </ul>
+                    </ul>
+                    <li> Brushing </li>
+                    <ul>
+                        <li> Being able to brush over a specfic set of points </li>
+                        <li> This will grey out the rest of them, and show just those points on each of the other plots </li>
+                    </ul>
+                    <li> Change Color </li>
+                    <ul>
+                        <li> Being able to choose whether the colors are for the type of wine or the quality of wine </li>
+                        <li> This will be a button/check box to select which one you want to see (or None) </li>
+                    </ul>
+                </ul>
+                <li> <b>Parallel Coordinates</b> </li>
+                <ul>
+                    <li> Brushing </li>
+                    <ul>
+                        <li> Being able to brush over specific points on an axis to show only those lines </li>
+                        <li> This wil grey out the rest of the lines and show just those selected throughout the whole plot </li>
+                    </ul>
+                </ul>
+            </ul>
         </div>
         <div class="col-md-1">
         </div>
     </div>
+
+    <div class="col-lg-12 text-center">
+     <h3 class="text-center">Planned Interface </h3>
+        <center><img class="media-object" align="middle" src="../img/mockup.png" style="width: 300px; height: 700px; border:1px solid #000000;"> </center>
+        <br>
+    </div>
+
 
     <hr/>
 
