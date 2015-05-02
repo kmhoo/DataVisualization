@@ -152,10 +152,7 @@ d3.csv("hw4/movies.csv", function(data) {
 	    d.color = color2(d.mpaa);
 	})
 
-
-	//// CHART 1 CREATION ////
-
-	// create new object with counts
+	// create new object with counts for chart 1 
 	var mpaa_counter = {}
 	for (var i=0; i<data.length; i++) {
         if (data[i].mpaa in mpaa_counter) {
@@ -169,9 +166,46 @@ d3.csv("hw4/movies.csv", function(data) {
     // sort and create an object of object
     var mpaa_freq = d3.entries(sorted(mpaa_counter));
 
+    // chart 1 generator
+	chart1(mpaa_freq);
+	create_legend(mpaa_freq);
+
+	// chart 2 generator
+	chart2(data);
+
+	// create new object that sums all the budget by decades for chart 3
+	var budget = {}
+	for (var i=0; i<data.length; i++) {
+		if (data[i].yearrange in budget) {
+			budget[data[i].yearrange].budget += data[i].budget;
+			budget[data[i].yearrange].count ++;
+		}
+		else {
+			budget[data[i].yearrange]={count: 1, budget: data[i].budget,
+				color: data[i].color};
+		}
+	};
+
+	// sort and make an object of objects
+	var budget = d3.entries(sorted(budget));
+
+	// calculate the average for each decade
+	budget.forEach(function(d) {
+		d.average = d.value.budget/d.value.count;
+	});
+
+	// chart 3 generator
+	chart3(budget);
+
+
+})
+
+//// CHART 1 CREATION ////
+function chart1(data){
+
 	// create domains for x and y scale
 	xScale1.domain([1100, 0]);
-	yScale1.domain(mpaa_freq.map(function(d) { return d.key; }));
+	yScale1.domain(data.map(function(d) { return d.key; }));
 
 	// add x axis and label
 	svg1.append("g")
@@ -198,23 +232,28 @@ d3.csv("hw4/movies.csv", function(data) {
         .style("text-anchor", "middle")
         .text("MPAA Rating");
 
-    // create bars and mouseover
-  	var bars = svg1.selectAll(".bar")
-        		   .data(mpaa_freq)
+    // create bars
+    var bars = svg1.append("g")
+                   .attr("class", "bars")
+				   .selectAll(".bar")
+        		   .data(data)
     		       .enter()
- 		           .append("rect")
-  			       .attr("class", "bar");
-    bars.attr("x", 0)
+ 		           .append("g")
+  			       .attr("class", function(d) { return "bar " + d.key; });
+
+    bars.append("rect")
+    	.attr("class", function(d) { return d.key; })
+    	.attr("x", 0)
         .attr("width", function(d) { return xScale1(d.value.value); })
         .attr("y", function(d) { return yScale1(d.key); })
         .attr("height", yScale1.rangeBand())
         .attr("fill", function(d) { return d.value.color})
         .style("opacity", 0.7)
-        .on("mouseover", function(d) {
+    	.on("mouseover", function(d) {
             tooltip1.transition()
             		.duration(200)
                     .style("opacity", 1)
-            tooltip1.html("<span><b>MPAA Rating</b>: " + d.key +" </span><br>" +
+            tooltip1.html("<span><b>MPAA Rating</b>: " + d.key + " </span><br>" +
                           "<span><b>Number of Movies</b>: " + d.value.value + "</span><br>")
                    .style("left", (event.pageX + 15) + "px")     
                    .style("top", (event.pageY - 20) + "px"); 
@@ -226,60 +265,11 @@ d3.csv("hw4/movies.csv", function(data) {
             d3.select(this).style("opacity", 0.7); 
          });
 
-
-// barGroup.on('click', function() {
-//             var groupClasses = d3.select(this).attr("class");
-//             var barClasses = d3.select(this).selectAll("rect").attr("class");
-//             console.log(barClasses);
-//             console.log(groupClasses);
-
-//             // de-select all bars
-//             d3.select("#barchart").selectAll("rect").classed({"selected": false});
-//             d3.select("#barchart").selectAll(".bar").classed({"selected": false});
-//             // select the bar that has been clicked on
-//             d3.select(this).selectAll("rect").classed({"selected": true});
-//             d3.select(this).classed({"selected": true});
-
-//             if(barClasses.search("selected") === -1) {
-//                 barchartFade(barClasses);
-//                 filterScatter(groupClasses);    
-//             }
-
-//             // If bar is already selected, reset and de-select
-//             else {
-//                 barchartFade("");
-//                 filterScatter("");
-//                 d3.select("#barchart").selectAll("rect").classed({"selected": false});
-//                 d3.select("#barchart").selectAll(".bar").classed({"selected": false});
-//             }
-//         });
+}	
 
 
-
-
-    // create legend for mpaa rating 
-	var legend = svg1.selectAll(".legend")
-      				 .data(mpaa_freq)
-    				 .enter()
-    				 .append("g")
-      				 .attr("class", "legend")
-      				 .style("border", "#000")
-      				 .attr('transform', function(d, i) {  return "translate(0," + i * 25 + ")"; });
-
-  	legend.append("rect")
-          .attr("x", width1 + 20)
-      	  .attr("width", 18)
-      	  .attr("height", 18)
-          .style("fill", function(d){ return d.value.color })
-          .style("opacity", 0.7);
-
-  	legend.append("text")
-          .attr("x", width1 + 40)
-          .attr("y", 13)
-          .text(function(d) { return d.key; });
-	
-
-	//// CHART 2 CREATION ////
+//// CHART 2 CREATION ////
+function chart2(data) {
 
 	// create domains for x and y scale
 	xScale2.domain(d3.extent(data, function(d) { return d.length; })).nice();
@@ -340,34 +330,15 @@ d3.csv("hw4/movies.csv", function(data) {
             d3.select(this).style("opacity", 0.5)
             			   .attr("r", 2); });
 
+}
 
 
-	//// CHART 2 CREATION ////
-
-	// create new object that sums all the budget by decades
-	var budget = {}
-	for (var i=0; i<data.length; i++) {
-		if (data[i].yearrange in budget) {
-			budget[data[i].yearrange].budget += data[i].budget;
-			budget[data[i].yearrange].count ++;
-		}
-		else {
-			budget[data[i].yearrange]={count: 1, budget: data[i].budget,
-				color: data[i].color};
-		}
-	};
-
-	// sort and make an object of objects
-	var budget = d3.entries(sorted(budget));
-
-	// calculate the average for each decade
-	budget.forEach(function(d) {
-		d.average = d.value.budget/d.value.count;
-	});
+//// CHART 3 CREATION ////
+function chart3(data) {
 
 	// create domains for x and y scale
-	xScale3.domain(budget.map(function(d) { return d.key; }));
-	yScale3.domain([0, d3.max(budget, function(d) { return d.average; })]);
+	xScale3.domain(data.map(function(d) { return d.key; }));
+	yScale3.domain([0, d3.max(data, function(d) { return d.average; })]);
 
 	// add x axis and label
 	svg3.append("g")
@@ -397,7 +368,7 @@ d3.csv("hw4/movies.csv", function(data) {
 
     // add bars and mouseover 
   	svg3.selectAll(".bar")
-      	.data(budget)
+      	.data(data)
     	.enter()
     	.append("rect")
       	.attr("class", "bar")
@@ -422,8 +393,38 @@ d3.csv("hw4/movies.csv", function(data) {
             d3.select(this).style("opacity", 1); 
          });
 
+}
 
-})
+
+// function to create legend in chart 1
+function create_legend(data){
+
+    // create legend for mpaa rating 
+	var legend = svg1.selectAll(".legend")
+      				 .data(data)
+    				 .enter()
+    				 .append("g")
+      				 .attr("class", "legend")
+      				 .style("border", "#000")
+      				 .attr('transform', function(d, i) {  return "translate(0," + i * 25 + ")"; });
+
+  	legend.append("rect")
+          .attr("x", width1 + 20)
+      	  .attr("width", 18)
+      	  .attr("height", 18)
+          .style("fill", function(d){ return d.value.color })
+          .style("opacity", 0.7)
+          .on("click", function(d) {
+          	d3.select(this).style("opacity", 1);
+          	console.log(d.key)
+          	console.log(d3.select(this).selected());
+          });
+
+  	legend.append("text")
+          .attr("x", width1 + 40)
+          .attr("y", 13)
+          .text(function(d) { return d.key; });
+}
 
 // function to sort the data
 function sorted(obj) {
@@ -455,41 +456,4 @@ function sorted(obj) {
 	}
 
 	return sort_budget;
-}
-
-function filterScatter(mpaa) {
-
-    // console.log("called filterScatter for "+mpaa);
-
-    var allCircles = d3.select("#scatterplotMatrix").selectAll("circle");
-    allCircles.classed({"invisible": false});
-
-    var classes = mpaa.split(" ");
-
-    if(mpaa !== "") {
-        var invisible = d3.select("#scatterplotMatrix").selectAll("circle")
-            .filter(function(d) { 
-                return classes.indexOf(d.mpaa) == -1;
-            });
-        invisible.classed({"invisible": true});
-    }
-}
-
-
-function barchartFade(mpaa) {
-
-    // if(mpaa === "") {
-    var allBars = d3.select("#barchart").selectAll("rect");
-    allBars.classed({"fadeOut": false});
-    // }
-
-    if(mpaa !== "") {
-        var fadeBars = d3.select("#barchart").selectAll("rect")
-            .filter(function(d) { 
-                classes = mpaa.split(" ");
-                return classes.indexOf(d.key) === -1;
-            });
-        fadeBars.classed({"fadeOut": true});
-    }
-
 }
