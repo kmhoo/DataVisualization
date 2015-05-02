@@ -17,50 +17,6 @@ var margin3 = {top: 60, right: 110, bottom: 50, left: 20},
 	height3 = 400 - margin3.top - margin3.bottom;
 
 
-// create svg images
-var svg1 = d3.select("svg#mpaa")
-    		 .attr("width", width1 + margin1.left + margin1.right)
-   			 .attr("height", height1 + margin1.top + margin1.bottom)
-    	     .append("g")
-  		     .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
-
-var svg2 = d3.select("svg#scatter")
-    		 .attr("width", width2 + margin2.left + margin2.right)
-   			 .attr("height", height2 + margin2.top + margin2.bottom)
-   			 .append("g")
-   			 .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
-
-
-var svg3 = d3.select("svg#budget")
-    		 .attr("width", width3 + margin3.left + margin3.right)
-   			 .attr("height", height3 + margin3.top + margin3.bottom)
-   			 .append("g")
-   			 .attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
-
-
-// create titles for plots
-var title1 = svg1.append("text")
-				 .attr("class", "title")
-    		     .attr("x", (width1 / 2))             
-   			     .attr("y", 0 - (margin1.top / 2))
-   			     .attr("text-anchor", "middle")  
-   			     .text("Number of Movies by MPAA Rating");
-
-var title2 = svg2.append("text")
-				 .attr("class", "title")
-        		 .attr("x", (width2 / 2))             
-       			 .attr("y", 0 - (margin2.top / 2))
-       			 .attr("text-anchor", "middle")  
-       			 .text("Rating vs. Length of Movie (in minutes)");
-
-var title3 = svg3.append("text")
-				 .attr("class", "title")
-       			 .attr("x", (width3 / 2))             
-       			 .attr("y", 0 - (margin3.top / 2))
-       			 .attr("text-anchor", "middle")  
-       			 .text("Average Budget by Decade");
-
-
 // create x scales (linear)
 var xScale1 = d3.scale.linear()
                 .range([width1, 0]);
@@ -120,18 +76,65 @@ var yAxis3 = d3.svg.axis()
     		   .orient("right");
 
 
+// create svg images
+var svg1 = d3.select("svg#mpaa")
+    		 .attr("width", width1 + margin1.left + margin1.right)
+   			 .attr("height", height1 + margin1.top + margin1.bottom)
+    	     .append("g")
+  		     .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
+
+var svg2 = d3.select("svg#scatter")
+    		 .attr("width", width2 + margin2.left + margin2.right)
+   			 .attr("height", height2 + margin2.top + margin2.bottom)
+   			 .append("g")
+   			 .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+
+var svg3 = d3.select("svg#budget")
+    		 .attr("width", width3 + margin3.left + margin3.right)
+   			 .attr("height", height3 + margin3.top + margin3.bottom)
+   			 .append("g")
+   			 .attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
+
+
 // create tooltip for the hover 
 var tooltip1 = d3.select("body").append("div")   
-    			 .attr("class", "tooltip1")               
+    			 .attr("class", "tooltip")               
    				 .style("opacity", 0.9);
 
 var tooltip2 = d3.select("body").append("div")   
-     			 .attr("class", "tooltip2")               
+     			 .attr("class", "tooltip")               
     			 .style("opacity", 0.9);
 
 var tooltip3 = d3.select("body").append("div")   
-     			 .attr("class", "tooltip3")               
+     			 .attr("class", "tooltip")               
     			 .style("opacity", 0.9);
+
+
+// create titles for plots
+var title1 = svg1.append("text")
+				 .attr("class", "title")
+    		     .attr("x", (width1 / 2))             
+   			     .attr("y", 0 - (margin1.top / 2))
+   			     .attr("text-anchor", "middle")  
+   			     .text("Number of Movies by MPAA Rating");
+
+var title2 = svg2.append("text")
+				 .attr("class", "title")
+        		 .attr("x", (width2 / 2))             
+       			 .attr("y", 0 - (margin2.top / 2))
+       			 .attr("text-anchor", "middle")  
+       			 .text("Rating vs. Length of Movie (in minutes)");
+
+var title3 = svg3.append("text")
+				 .attr("class", "title")
+       			 .attr("x", (width3 / 2))             
+       			 .attr("y", 0 - (margin3.top / 2))
+       			 .attr("text-anchor", "middle")  
+       			 .text("Average Budget by Decade");
+
+// create format for budget
+var format = d3.format("0,000,000");
 
 
 // load data and add into svgs
@@ -152,78 +155,196 @@ d3.csv("hw4/movies.csv", function(data) {
 
 	//// CHART 1 CREATION ////
 
-
+	// create new object with counts
 	var mpaa_counter = {}
 	for (var i=0; i<data.length; i++) {
-
         if (data[i].mpaa in mpaa_counter) {
-            mpaa_counter[data[i].mpaa].value++;
+        	mpaa_counter[data[i].mpaa].value++;
         }
         else {
             mpaa_counter[data[i].mpaa]={value: 1, color: data[i].color};
         }
     };
 
+    // sort and create an object of object
     var mpaa_freq = d3.entries(sorted(mpaa_counter));
 
-	//chart 1
+	// create domains for x and y scale
 	xScale1.domain([1100, 0]);
 	yScale1.domain(mpaa_freq.map(function(d) { return d.key; }));
 
+	// add x axis and label
 	svg1.append("g")
-      .attr("class", "x1 axis")
-      .attr("transform", "translate(0," + height1 + ")")
-      .call(xAxis1)
-    .append("text")
-      .attr("class", "label1")
-      .attr("x", width1/2)
-      .attr("y", 35)
-      .style("text-anchor", "middle")
-      .text("Number of Movies");
+        .attr("class", "x1 axis")
+        .attr("transform", "translate(0," + height1 + ")")
+        .call(xAxis1)
+    	.append("text")
+        .attr("class", "label1")
+        .attr("x", width1/2)
+        .attr("y", 35)
+        .style("text-anchor", "middle")
+        .text("Number of Movies");
 
-  svg1.append("g")
-      .attr("class", "y1 axis")
-      .call(yAxis1)
-    .append("text")
-      .attr("class", "label1")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin1.left + 10)
-      .attr("x", 0 - height1/2)
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("MPAA Rating")
+    // add y axis and label
+  	svg1.append("g")
+      	.attr("class", "y1 axis")
+        .call(yAxis1)
+    	.append("text")
+        .attr("class", "label1")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin1.left + 10)
+        .attr("x", 0 - height1/2)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("MPAA Rating");
 
-  svg1.selectAll(".bar")
-      .data(mpaa_freq)
-    .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", 0)
-      .attr("width", function(d) { return xScale1(d.value.value); })
-      .attr("y", function(d) { return yScale1(d.key); })
-      .attr("height", yScale1.rangeBand())
-      .attr("fill", function(d) { return d.value.color})
-      .style("opacity", 0.7);
+    // create bars and mouseover
+  	var bars = svg1.selectAll(".bar")
+        		   .data(mpaa_freq)
+    		       .enter()
+ 		           .append("rect")
+  			       .attr("class", "bar");
+    bars.attr("x", 0)
+        .attr("width", function(d) { return xScale1(d.value.value); })
+        .attr("y", function(d) { return yScale1(d.key); })
+        .attr("height", yScale1.rangeBand())
+        .attr("fill", function(d) { return d.value.color})
+        .style("opacity", 0.7)
+        .on("mouseover", function(d) {
+            tooltip1.transition()
+            		.duration(200)
+                    .style("opacity", 1)
+            tooltip1.html("<span><b>MPAA Rating</b>: " + d.key +" </span><br>" +
+                          "<span><b>Number of Movies</b>: " + d.value.value + "</span><br>")
+                   .style("left", (event.pageX + 15) + "px")     
+                   .style("top", (event.pageY - 20) + "px"); 
+            d3.select(this).style("opacity", 1); 
+          })
+        .on("mouseout", function(d){
+            tooltip1.transition()
+                   .style("opacity", 0);
+            d3.select(this).style("opacity", 0.7); 
+         });
 
-var legend = svg1.selectAll(".legend")
-      .data(mpaa_freq)
-    .enter().append("g")
-      .attr("class", "legend")
-      .style("border", "#000")
-      .attr('transform', function(d, i) {  return "translate(0," + i * 25 + ")"; });
 
-  legend.append("rect")
-      .attr("x", width1 + 20)
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", function(d){ return d.value.color })
-      .style("opacity", 0.7);
+// barGroup.on('click', function() {
+//             var groupClasses = d3.select(this).attr("class");
+//             var barClasses = d3.select(this).selectAll("rect").attr("class");
+//             console.log(barClasses);
+//             console.log(groupClasses);
 
-  legend.append("text")
-      .attr("x", width1 + 40)
-      .attr("y", 13)
-      .text(function(d) { return d.key; });
+//             // de-select all bars
+//             d3.select("#barchart").selectAll("rect").classed({"selected": false});
+//             d3.select("#barchart").selectAll(".bar").classed({"selected": false});
+//             // select the bar that has been clicked on
+//             d3.select(this).selectAll("rect").classed({"selected": true});
+//             d3.select(this).classed({"selected": true});
 
-	//
+//             if(barClasses.search("selected") === -1) {
+//                 barchartFade(barClasses);
+//                 filterScatter(groupClasses);    
+//             }
+
+//             // If bar is already selected, reset and de-select
+//             else {
+//                 barchartFade("");
+//                 filterScatter("");
+//                 d3.select("#barchart").selectAll("rect").classed({"selected": false});
+//                 d3.select("#barchart").selectAll(".bar").classed({"selected": false});
+//             }
+//         });
+
+
+
+
+    // create legend for mpaa rating 
+	var legend = svg1.selectAll(".legend")
+      				 .data(mpaa_freq)
+    				 .enter()
+    				 .append("g")
+      				 .attr("class", "legend")
+      				 .style("border", "#000")
+      				 .attr('transform', function(d, i) {  return "translate(0," + i * 25 + ")"; });
+
+  	legend.append("rect")
+          .attr("x", width1 + 20)
+      	  .attr("width", 18)
+      	  .attr("height", 18)
+          .style("fill", function(d){ return d.value.color })
+          .style("opacity", 0.7);
+
+  	legend.append("text")
+          .attr("x", width1 + 40)
+          .attr("y", 13)
+          .text(function(d) { return d.key; });
+	
+
+	//// CHART 2 CREATION ////
+
+	// create domains for x and y scale
+	xScale2.domain(d3.extent(data, function(d) { return d.length; })).nice();
+  	yScale2.domain(d3.extent(data, function(d) { return d.rating; })).nice();
+
+  	// add x axis and label
+	svg2.append("g")
+        .attr("class", "x2 axis")
+        .attr("transform", "translate(0," + height2 + ")")
+        .call(xAxis2)
+    	.append("text")
+        .attr("class", "label2")
+        .attr("x", width2/2)
+        .attr("y", 35)
+        .style("text-anchor", "middle")
+        .text("Length of Movie (in minutes)");
+
+    // add y axis and label
+  	svg2.append("g")
+        .attr("class", "y2 axis")
+        .call(yAxis2)
+	    .append("text")
+        .attr("class", "label2")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin2.left + 15)
+        .attr("x", 0 - height2/2)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Rating of Movie")
+
+    // add dots and mouseovers 
+    svg2.selectAll(".dot")
+      	.data(data)
+    	.enter()
+    	.append("circle")
+      	.attr("class", "dot")
+   	    .attr("r", 2)
+        .attr("cx", function(d) { return xScale2(d.length); })
+	    .attr("cy", function(d) { return yScale2(d.rating); })
+        .style("fill", function(d) { return color2(d.mpaa); })
+        .style("opacity", 0.5)
+        .on("mouseover", function(d) {
+            tooltip2.transition()
+            		.duration(200)
+                    .style("opacity", 1)
+            tooltip2.html("<span><b>Movie Title</b>: " + d.title +"</span><br>" +
+            			  "<span><b>MPAA Rating</b>: " + d.mpaa +" </span><br>" +
+                          "<span><b>Length of Movie</b>: " + d.length + " mins. </span><br>" +
+                          "<span><b>Rating</b>: " + d.rating + "</span><br>")
+                   .style("left", (event.pageX + 15) + "px")     
+                   .style("top", (event.pageY - 20) + "px"); 
+            d3.select(this).style("opacity", 1)
+            		 	   .attr("r", 5); 
+          })
+        .on("mouseout", function(d){
+            tooltip2.transition()
+                   .style("opacity", 0);
+            d3.select(this).style("opacity", 0.5)
+            			   .attr("r", 2); });
+
+
+
+	//// CHART 2 CREATION ////
+
+	// create new object that sums all the budget by decades
 	var budget = {}
 	for (var i=0; i<data.length; i++) {
 		if (data[i].yearrange in budget) {
@@ -236,115 +357,139 @@ var legend = svg1.selectAll(".legend")
 		}
 	};
 
-
+	// sort and make an object of objects
 	var budget = d3.entries(sorted(budget));
 
+	// calculate the average for each decade
 	budget.forEach(function(d) {
 		d.average = d.value.budget/d.value.count;
 	});
 
+	// create domains for x and y scale
 	xScale3.domain(budget.map(function(d) { return d.key; }));
 	yScale3.domain([0, d3.max(budget, function(d) { return d.average; })]);
 
-
+	// add x axis and label
 	svg3.append("g")
-      .attr("class", "x3 axis")
-      .attr("transform", "translate(0," + height3 + ")")
-      .call(xAxis3)
-    .append("text")
-      .attr("class", "label3")
-      .attr("x", width3/2)
-      .attr("y", 35)
-      .style("text-anchor", "middle")
-      .text("Decades");
+        .attr("class", "x3 axis")
+        .attr("transform", "translate(0," + height3 + ")")
+        .call(xAxis3)
+    	.append("text")
+        .attr("class", "label3")
+        .attr("x", width3/2)
+        .attr("y", 35)
+        .style("text-anchor", "middle")
+        .text("Decades");
 
-  svg3.append("g")
-      .attr("class", "y3 axis")
-      .attr("transform", "translate(" + width3 + ",0)")
-      .call(yAxis3)
-    .append("text")
-      .attr("class", "label3")
-      .attr("transform", "rotate(-90)")
-      .attr("y", margin3.right - 25)
-      .attr("x", 0 - height3/2)
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("Average Budget")
+    // add y axis and label
+  	svg3.append("g")
+        .attr("class", "y3 axis")
+        .attr("transform", "translate(" + width3 + ",0)")
+        .call(yAxis3)
+    	.append("text")
+        .attr("class", "label3")
+        .attr("transform", "rotate(-90)")
+        .attr("y", margin3.right - 25)
+        .attr("x", 0 - height3/2)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Average Budget")
 
-  svg3.selectAll(".bar")
-      .data(budget)
-    .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", function(d) { return xScale3(d.key); })
-      .attr("width", xScale3.rangeBand())
-      .attr("y", function(d) { return yScale3(d.average); })
-      .attr("height", function(d) { return height3 - yScale3(d.average); })
-      .attr("fill", "#377eb8");
+    // add bars and mouseover 
+  	svg3.selectAll(".bar")
+      	.data(budget)
+    	.enter()
+    	.append("rect")
+      	.attr("class", "bar")
+      	.attr("x", function(d) { return xScale3(d.key); })
+      	.attr("width", xScale3.rangeBand())
+      	.attr("y", function(d) { return yScale3(d.average); })
+      	.attr("height", function(d) { return height3 - yScale3(d.average); })
+      	.attr("fill", "#377eb8")
+      	.on("mouseover", function(d) {
+            tooltip3.transition()
+            		.duration(200)
+                    .style("opacity", 1)
+            tooltip3.html("<span><b>Decade</b>: " + d.key + "</span><br>" +
+            			  "<span><b>Average Budget</b>: $" + format(Math.round(d.average)) + "</span><br>")
+                    .style("left", (event.pageX + 15) + "px")     
+                    .style("top", (event.pageY - 20) + "px"); 
+            d3.select(this).style("opacity", 0.5); 
+         })
+        .on("mouseout", function(d){
+            tooltip3.transition()
+                    .style("opacity", 0);
+            d3.select(this).style("opacity", 1); 
+         });
 
-
-
-	//chart 2
-	xScale2.domain(d3.extent(data, function(d) { return d.length; })).nice();
-  	yScale2.domain(d3.extent(data, function(d) { return d.rating; })).nice();
-
-svg2.append("g")
-      .attr("class", "x2 axis")
-      .attr("transform", "translate(0," + height2 + ")")
-      .call(xAxis2)
-    .append("text")
-      .attr("class", "label2")
-      .attr("x", width2/2)
-      .attr("y", 35)
-      .style("text-anchor", "middle")
-      .text("Length of Movie (in minutes)");
-
-  svg2.append("g")
-      .attr("class", "y2 axis")
-      .call(yAxis2)
-    .append("text")
-      .attr("class", "label2")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin2.left + 15)
-      .attr("x", 0 - height2/2)
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("Rating of Movie")
-
-
-  svg2.selectAll(".dot")
-      .data(data)
-    .enter().append("circle")
-      .attr("class", "dot")
-      .attr("r", 2)
-      .attr("cx", function(d) { return xScale2(d.length); })
-      .attr("cy", function(d) { return yScale2(d.rating); })
-      .style("fill", function(d) { return color2(d.mpaa); })
-      .style("opacity", 0.5);
 
 })
 
-    function sorted(obj) {
-	var temp_array = []
-        for (var key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                temp_array.push(key);
-            }
-        }
-        if (temp_array.length==4) {
-            temp_array.sort(function(a,b) {
-              var a_value = obj[a].value;
-              var b_value = obj[b].value;
-              return ((a_value < b_value) ? 1 : ((a_value > b_value) ? -1 : 0));
-            });
-        }
-        else{
-        	temp_array.sort();
-        }
+// function to sort the data
+function sorted(obj) {
 
-    sort_budget = {};
-    for (var i=0; i<temp_array.length; i++) {
-        sort_budget[temp_array[i]] = obj[temp_array[i]];
+	// create temp array
+	var temp_array = []
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            temp_array.push(key);
+        }
     }
 
-    return sort_budget;
+    // sort the keys 
+    if (temp_array.length==4) {
+        temp_array.sort(function(a,b) {
+        	var a_value = obj[a].value;
+            var b_value = obj[b].value;
+          	return ((a_value < b_value) ? 1 : ((a_value > b_value) ? -1 : 0));
+        });
+    }
+    else {
+    	temp_array.sort();
+    }
+
+    // create new object sorted
+	sort_budget = {};
+	for (var i=0; i<temp_array.length; i++) {
+    	sort_budget[temp_array[i]] = obj[temp_array[i]];
+	}
+
+	return sort_budget;
+}
+
+function filterScatter(mpaa) {
+
+    // console.log("called filterScatter for "+mpaa);
+
+    var allCircles = d3.select("#scatterplotMatrix").selectAll("circle");
+    allCircles.classed({"invisible": false});
+
+    var classes = mpaa.split(" ");
+
+    if(mpaa !== "") {
+        var invisible = d3.select("#scatterplotMatrix").selectAll("circle")
+            .filter(function(d) { 
+                return classes.indexOf(d.mpaa) == -1;
+            });
+        invisible.classed({"invisible": true});
+    }
+}
+
+
+function barchartFade(mpaa) {
+
+    // if(mpaa === "") {
+    var allBars = d3.select("#barchart").selectAll("rect");
+    allBars.classed({"fadeOut": false});
+    // }
+
+    if(mpaa !== "") {
+        var fadeBars = d3.select("#barchart").selectAll("rect")
+            .filter(function(d) { 
+                classes = mpaa.split(" ");
+                return classes.indexOf(d.key) === -1;
+            });
+        fadeBars.classed({"fadeOut": true});
+    }
+
 }
