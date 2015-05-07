@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Project Prototype</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <style type="text/css">
+        body {
+            padding-top: 50px;
+            padding-bottom: 20px;
+            padding-left: auto;
+            padding-right: auto;
+        }
+
+    </style>
+
+
+</head>
+<body>
+
+<!-- Fixed Navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://kmhoo.github.io/DataVisualization/">MSAN 622</a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="http://kmhoo.github.io/DataVisualization/#homework">Homework</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#project">Project</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#participation">Participation</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://kmhoo.github.io/DataVisualization/#about">About</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#contact">Contact</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="text-center">Project Prototype</h1>
+
+        <p>Here you can find a dataset summary, sketch summary, as well as an implementation of a prototype of at least one of the techniques from the sketch. </p>
+    </div>
+</div>
+<div class="container">
+
+      <!-- Import d3 -->
+    <script src="../js/d3.min.js"></script>
+    <script src="../js/colorbrewer.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+    <div class="col-lg-12 text-center">
+    <h2>Wine Quality Dataset</h2>
+    <h4> Red and White variants of the Portuguese "Vinho Verde" wine </h4>
+    <center><img class="media-object" align="middle" src="../img/wine.jpg" style="width: 250px; height: 170px;"> </center>
+
+    <br>
+     <h3 class="text-center">Dashboard Prototype</h3>
+        <p> <a href="http://kmhoo.github.io/DataVisualization/project/prototype/dashboard.html">Dashboard</a> </p>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+
+        <div class="col-md-5">
+            <h3 class="text-center">Dataset Summary</h3>
+            <p> The dataset that I chose to work with is a Wine Quality Dataset. There are 4,898 different variants of wine samples, both red and white, from the North of Portugal. Majority of this data set is columns that reflect the physicochemical elements of the wine. These metrics include the alcohol level, acidity, residual sugar, sulfur dioxides, and many more. There are two categorical columns in this dataset. The first is the quality of the wine, which is on a scale of 0 to 10, and the second is the type of wine, either red or white. More information about the wines were excluded for privacy and logisitic issues. I am hoping that by using this dataset, we can figure out how the physicochemical inputs reflect the quality of the wine. You can find more details on the dataset, <a href="http://kmhoo.github.io/DataVisualization/project/dataset.html">here</a>. Depending on how the charts look, I subset the data so that we can see distinctions because there might be too much data on one chart. If that is the case, I will have it so there is closer to an even distribution between quality level. </p>
+
+        </div>
+
+        <div class="col-md-5">
+            <h3 class="text-center">Sketch Summary</h3>
+            <p> For the sketch of this dataset, I decided to do three distinct charts. The first is going to be a simple stacked bar chart to be able to see the distribution of the quality of wines by wine type, red or white. This will be a very simple chart that will help introduce the data. The second chart will be a scatter plot matrix that will show the relationship between each of the numerical metrics. Ideally, you will be able to choose the metrics that you want to see against each other. The hope for this chart is to see which features are most correlated to each other and reflective of the quality. The last chart will be a parallel coordinates chart where majority of the metrics will be shown and you can brush each one to see specific wines. All three of these charts will be able to be filtered by a check box for the type of wine, red and/or white. You can find more details and the original layout <a href="http://kmhoo.github.io/DataVisualization/project/sketch.html">here</a>. I am hoping as I create the different charts, a better layout will result, but for now, I plan to keep them as is. </p>
+        </div>
+
+        <div class="col-md-1">
+        </div>
+    </div>
+
+    <hr/>
+
+    <footer>
+        <p style="text-align: center;">Kailey Hoo &bullet; MSAN 622 Information Visualization &bullet; Spring 2015</p>
+    </footer>
+
+</div><!--/.container -->
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/d3.min.js"></script>
+
+
+</body>
+</html>

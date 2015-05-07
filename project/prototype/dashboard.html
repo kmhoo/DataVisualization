@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Project Prototype</title>
+
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <style type="text/css">
+    body {
+        padding-top: 50px;
+        padding-bottom: 20px;
+        padding-left: auto;
+        padding-right: auto;
+    }
+    </style>
+
+</head>
+<body>
+    <!-- create style for the axis lines, text, bars, hovers, and tooltip -->
+    <style type="text/css">
+
+        svg {
+            /*background-color: #000;*/
+
+        }
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke-width: 1;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .dot {
+          stroke: #000;
+          fill-opacity:  .7;
+        }
+
+        .dot:hover {
+            stroke: #000;
+            fill-opacity: 1;
+        }
+
+        .frame {
+          fill: none;
+          stroke: #aaa;
+        }
+
+        .background path {
+            fill: none;
+            stroke: #ccc;
+            stroke-opacity: .4;
+            shape-rendering: crispEdges;
+        }
+
+        .foreground path {
+            fill: none;
+            stroke-opacity: .7;
+        }
+
+        .brush .extent {
+            fill-opacity: .3;
+            stroke: #fff;
+            shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            text-shadow: 0 1px 0 #fff;
+            font-size: 10px;
+            cursor: move;
+        } 
+
+        .title {
+            font-size: 18px;
+            font-family: sans-serif;
+            stroke: #000;
+            font-style: bold;
+        }
+
+        .tooltip {
+            background: white;
+            stroke: #fff;
+            opacity: 0.5;
+            position: absolute; 
+            border-radius: 8px;            
+            border: 0px;  
+            width: auto;                  
+            height: auto;                 
+            padding: 2px;
+            box-shadow: 0 0px 2px rgba(0, 0, 0, 0.5);    
+        }
+
+    </style>
+
+<!-- Fixed Navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://kmhoo.github.io/DataVisualization/">MSAN 622</a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="http://kmhoo.github.io/DataVisualization/#homework">Homework</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#project">Project</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#participation">Participation</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://kmhoo.github.io/DataVisualization/#about">About</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#contact">Contact</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container">
+    <div class="col-lg-12 text-center" id="chart">
+
+        <div style="text-align:center;">
+            <h1>Prototype Dashboard</h1>
+            <p> 
+                Kailey Hoo: <a href="https://github.com/kmhoo/DataVisualization/blob/gh-pages/project/prototype/dashboard.html">Source Code </a>
+            </p>
+        </div>
+
+        <!-- Import d3 -->
+        <script src="../../js/d3.min.js"></script>
+        <script src="../../js/colorbrewer.js"></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+        <div class="col-lg-12 text-center"> 
+            <h2>Wine Quality Dataset</h2>
+            <h4> Red and White variants of the Portuguese "Vinho Verde" wine </h4>
+            <br>
+            <div style="text-align:center;">
+                <label><input type="checkbox" id="bubble"> White Wine </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <label><input type="checkbox" id="scatter"> Red Wine </label>
+            </div>
+            <br>
+            <div id="block">
+            <svg id="bar" width="10" height="10"></svg>
+            <svg id="scatter" width="10" height="10"></svg>
+            <svg id="parallel" width="10" height="10"></svg>
+            <script src="dashboard.js"></script>
+            </div>
+        </div>
+
+    </div>
+
+
+    <hr/>
+
+    <footer>
+        <p style="text-align: center;">Kailey Hoo &bullet; MSAN 622 Information Visualization &bullet; Spring 2015</p>
+    </footer>
+
+</div><!--/.container -->
+
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/d3.min.js"></script>
+
+
+</body>
+</html>
