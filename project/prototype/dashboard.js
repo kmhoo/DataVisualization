@@ -4,7 +4,7 @@
 // chart 3 - parallel coordinates
 
 // create margins, widths and heights
-var margin1 = {top: 60, right: 30, bottom: 50, left: 30},
+var margin1 = {top: 60, right: 30, bottom: 50, left: 60},
 	width1 = 395 - margin1.left - margin1.right,
 	height1 = 400 - margin1.top - margin1.bottom;
 
@@ -17,20 +17,20 @@ var margin3 = {top: 60, right: 30, bottom: 10, left: 30},
 	height3 = 400 - margin3.top - margin3.bottom;
 
 
-// create x scales (linear)
-var xScale1 = d3.scale.linear()
-                .range([width1, 0]);
+// create x scales
+var xScale1 = d3.scale.ordinal()
+                .rangeRoundBands([0, width1], .1);
 
 var xScale2 = d3.scale.linear()
-    			.range([0, width2]);
+    			      .range([0, width2]);
 
 var xScale3 = d3.scale.ordinal()
-    			      .rangePoints([0, width3], 1);
+    			      .rangePoints([0, width3]);
 
 
-// create y scales (ordinal)
-var yScale1 = d3.scale.ordinal()
-             	.rangeRoundBands([0, height1], 0.1);
+// create y scales 
+var yScale1 = d3.scale.linear()
+             	.rangeRound([height1, 0]);
 
 var yScale2 = d3.scale.linear()
     			      .range([height2, 0]);
@@ -39,8 +39,14 @@ var yScale3 = {};
 
 
 // create color scales (ordinal)
-var colorScale = d3.scale.ordinal()
-                   .range(["#fdc086","#beaed4"]);
+var colorScale1 = d3.scale.ordinal()
+                    .range(["#fdc086","#beaed4"]);
+
+var colorScale2 = d3.scale.ordinal()
+                    .range(["#fdc086","#beaed4"]);
+
+var colorScale3 = d3.scale.ordinal()
+                    .range(["#fdc086","#beaed4"]);
 
 // create axes based on scales
 var xAxis1 = d3.svg.axis()
@@ -54,6 +60,7 @@ var xAxis2 = d3.svg.axis()
 var yAxis1 = d3.svg.axis()
                .scale(yScale1)
                .orient("left");
+               // .tickFormat(d3.format(".2s"))
 
 var yAxis2 = d3.svg.axis()
     		       .scale(yScale2)
@@ -147,8 +154,27 @@ d3.csv("../dataset/winequality.csv", function(data) {
                 "residualSugar": "Residual Sugar", "sulphates": "Sulphates", "totalSulfurDioxide": "Total Sulfur Dioxide", 
                 "volatileAcidity": "Volatile Acidity", "type": "Type"}
 
-   //  // chart 1 generator
-  	// chart1(data);
+
+    var quality_counter = {}
+    for (var i=0; i<data.length; i++) {
+        if (data[i].quality in quality_counter) {
+            if (data[i].type =="red"){
+                quality_counter[data[i].quality].red ++;
+            } else {
+                quality_counter[data[i].quality].white ++;
+            }
+        } else {
+            if (data[i].type =="red"){
+                quality_counter[data[i].quality] = {"red": 1, "white": 0};
+            } else {
+                quality_counter[data[i].quality] = {"red": 0, "white": 1}; 
+        }
+    }};
+
+    quality_bar = d3.entries(sorted(quality_counter));
+
+    // chart 1 generator
+  	chart1(quality_bar);
 
   	// // chart 2 generator
   	// chart2(data);
@@ -159,70 +185,81 @@ d3.csv("../dataset/winequality.csv", function(data) {
 
   })
 
+// d3.slider().axis(true).min(0).max(10).step(1);
+
 //// CHART 1 CREATION ////
 function chart1(data){
 
-	// create domains for x and y scale
-	xScale1.domain([1100, 0]);
-	yScale1.domain(data.map(function(d) { return d.key; }));
+    colorScale1.domain(["white", "red"]);
 
-	// add x axis and label
-	svg1.append("g")
+    data.forEach(function(d) {
+        var y0 = 0;
+        d.types = colorScale1.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d.value[name]}; });
+        d.total = d.value.red + d.value.white;
+    });
+
+    console.log(data);
+
+    xScale1.domain(data.map(function(d) { return d.key; }));
+    yScale1.domain([0, d3.max(data, function(d) { return d.total; })]);
+
+        // add x axis and label
+    svg1.append("g")
         .attr("class", "x1 axis")
         .attr("transform", "translate(0," + height1 + ")")
         .call(xAxis1)
-    	.append("text")
+        .append("text")
         .attr("class", "label1")
         .attr("x", width1/2)
         .attr("y", 35)
         .style("text-anchor", "middle")
-        .text("Number of Movies");
+        .text("Quality Score");
 
     // add y axis and label
-  	svg1.append("g")
-      	.attr("class", "y1 axis")
+    svg1.append("g")
+        .attr("class", "y1 axis")
         .call(yAxis1)
-    	.append("text")
+        .append("text")
         .attr("class", "label1")
         .attr("transform", "rotate(-90)")
         .attr("y", 0 - margin1.left + 10)
         .attr("x", 0 - height1/2)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("MPAA Rating");
+        .text("Number of Wine Samples");
 
-    // create bars
-    var bars = svg1.append("g")
-                   .attr("class", "bars")
-				   .selectAll(".bar")
-        		   .data(data)
-    		       .enter()
- 		           .append("g")
-  			       .attr("class", function(d) { return "bar " + d.key; });
+    var wines = svg1.selectAll(".wines")
+                    .data(data)
+                    .enter()
+                    .append("g")
+                    .attr("class", "g")
+                    .attr("transform", function(d) { return "translate(" + xScale1(d.key) + ",0)"; });
 
-    bars.append("rect")
-    	.attr("class", function(d) { return d.key; })
-    	.attr("x", 0)
-        .attr("width", function(d) { return xScale1(d.value.value); })
-        .attr("y", function(d) { return yScale1(d.key); })
-        .attr("height", yScale1.rangeBand())
-        .attr("fill", function(d) { return d.value.color})
-        .style("opacity", 0.7)
-    	.on("mouseover", function(d) {
-            tooltip1.transition()
-            		.duration(200)
-                    .style("opacity", 1)
-            tooltip1.html("<span><b>MPAA Rating</b>: " + d.key + " </span><br>" +
-                          "<span><b>Number of Movies</b>: " + d.value.value + "</span><br>")
-                   .style("left", (event.pageX + 15) + "px")     
-                   .style("top", (event.pageY - 20) + "px"); 
-            d3.select(this).style("opacity", 1); 
-          })
-        .on("mouseout", function(d){
-            tooltip1.transition()
-                   .style("opacity", 0);
-            d3.select(this).style("opacity", 0.7); 
-         });
+    wines.selectAll("rect")
+         .data(function(d) { return d.types; })
+         .enter()
+         .append("rect")
+         .attr("width", xScale1.rangeBand())
+         .attr("y", function(d) { return yScale1(d.y1); })
+         .attr("height", function(d) { return yScale1(d.y0) - yScale1(d.y1); })
+         .style("fill", function(d) { return colorScale1(d.name); })
+         .style("opacity", 0.7)
+         .on("mouseover", function(d) {
+              tooltip1.transition()
+                  .duration(200)
+                      .style("opacity", 1)
+              tooltip1.html("<span><b>Wine Type</b>: " + d.name + " </span><br>" +
+                            "<span><b>Number of Samples</b>: " + (d.y1-d.y0) + "</span><br>")
+                     .style("left", (event.pageX + 15) + "px")     
+                     .style("top", (event.pageY - 20) + "px"); 
+              d3.select(this).style("opacity", 1); 
+            })
+         .on("mouseout", function(d){
+              tooltip1.transition()
+                     .style("opacity", 0);
+              d3.select(this).style("opacity", 0.7); 
+           });
+
 }	
 
 
@@ -331,12 +368,12 @@ function chart3(data, cols) {
                       .data(data)
                       .enter()
                       .append("path")
-                      .style("stroke", function(d) { return colorScale(d.type); })
+                      .style("stroke", function(d) { return colorScale3(d.type); })
                       .style("stroke-width", 1.25)
                       .attr("d", path);
 
     // add group elements for each dimension
-    var grp = svg3.selectAll(".dimension")
+    var g = svg3.selectAll(".dimension")
                   .data(dimensions)
                   .enter()
                   .append("g")
@@ -352,7 +389,7 @@ function chart3(data, cols) {
                       foreground3.attr("d", path);
                       dimensions.sort(function(a, b) { return position(a) - position(b); });
                       xScale3.domain(dimensions);
-                      grp.attr("transform", function(d) { return "translate(" + position(d) + ")"; })
+                      g.attr("transform", function(d) { return "translate(" + position(d) + ")"; })
                   })
                   .on("dragend", function(d) {
                       delete this.__origin__;
@@ -367,7 +404,7 @@ function chart3(data, cols) {
                   }));
 
   // add an axis and title
-    grp.append("g")
+    g.append("g")
        .attr("class", "axis")
        .each(function(d) { d3.select(this).call(Axis3.scale(yScale3[d])); })
        .append("text")
@@ -376,7 +413,7 @@ function chart3(data, cols) {
        .text(function(d) {return cols[d]} );
 
   // add and store a brush for each axis
-    grp.append("g")
+    g.append("g")
        .attr("class", "brush")
        .each(function(d) { d3.select(this).call(yScale3[d].brush = d3.svg.brush().y(yScale3[d]).on("brushstart", brushstart).on("brush", brush)); })
        .selectAll("rect")
@@ -426,17 +463,19 @@ function sorted(obj) {
         }
     }
 
-    // sort the keys 
-    if (temp_array.length==4) {
-        temp_array.sort(function(a,b) {
-        	var a_value = obj[a].value;
-            var b_value = obj[b].value;
-          	return ((a_value < b_value) ? 1 : ((a_value > b_value) ? -1 : 0));
-        });
-    }
-    else {
+    // // sort the keys 
+    // if (temp_array.length==4) {
+    //     temp_array.sort(function(a,b) {
+    //     	  var a_value = obj[a].value;
+    //         var b_value = obj[b].value;
+    //       	return ((a_value < b_value) ? 1 : ((a_value > b_value) ? -1 : 0));
+    //     });
+    // }
+    // else {
     	temp_array.sort();
-    }
+
+      console.log(temp_array);
+    // }
 
     // create new object sorted
 	sort_budget = {};
