@@ -9,6 +9,7 @@
 
     <link href="../../css/bootstrap.min.css" rel="stylesheet">
     <link href="../../css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../../css/d3.slider.css" rel="stylesheet">
 
     <style type="text/css">
     body {
@@ -95,6 +96,35 @@
             box-shadow: 0 0px 2px rgba(0, 0, 0, 0.5);    
         }
 
+        input[type="range"]
+        {
+            width: 300px;
+            vertical-align: middle;
+            display: table-cell;
+        }
+
+        output {
+            font-weight: bold;
+        }
+
+        .scatter.axis {
+            font-size: 10px
+        }
+        .scatter.axis {
+          shape-rendering: crispEdges;
+        }
+
+        .scatter.axis line {
+          stroke: #fff;
+          stroke-width: 0px;
+
+        }
+
+        .scatter.axis path {
+          display: none;
+
+        }
+
     </style>
 
 <!-- Fixed Navbar -->
@@ -145,12 +175,24 @@
             <h4> Red and White variants of the Portuguese "Vinho Verde" wine </h4>
             <br>
             <div style="text-align:center;">
-                <label><input type="checkbox" id="bubble"> White Wine </label>&nbsp;&nbsp;&nbsp;&nbsp;
-                <label><input type="checkbox" id="scatter"> Red Wine </label>
+                <label><input type="checkbox" id="white"> White Wine </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <label><input type="checkbox" id="red"> Red Wine </label>
+                <br>
+                <div>
+                    <label for=quality>Quality Score:</label> <output for=quality id="volume">0</output>
+                    <input class="slider" type="range" min="0" max="10" value="0" step="1" id="quality" oninput="outputUpdate(value)" />
+                    
+                    <script>
+                    function outputUpdate(vol) {
+                    document.querySelector('#volume').value = vol;
+                    }
+                    </script>
+                </div>
             </div>
-            <br>
+            <br>  
             <div id="block">
             <svg id="bar" width="10" height="10"></svg>
+            <span id="list1"></span> <span id="list1"></span>
             <svg id="scatter" width="10" height="10"></svg>
             <svg id="parallel" width="10" height="10"></svg>
             <script src="dashboard.js"></script>
@@ -158,7 +200,6 @@
         </div>
 
     </div>
-
 
     <hr/>
 
@@ -171,6 +212,7 @@
 <script src="../../js/jquery.min.js"></script>
 <script src="../../js/bootstrap.min.js"></script>
 <script src="../../js/d3.min.js"></script>
+<script src="../../js/d3.slider.js"></script>
 
 
 </body>

@@ -5,47 +5,19 @@
 
 // create margins, widths and heights
 var margin1 = {top: 60, right: 30, bottom: 50, left: 60},
-	width1 = 395 - margin1.left - margin1.right,
-	height1 = 400 - margin1.top - margin1.bottom;
-
-var margin2 = {top: 60, right: 30, bottom: 50, left: 30},
-	width2 = 532 - margin2.left - margin2.right,
-	height2 = 400 - margin2.top - margin2.bottom;
-
-var margin3 = {top: 60, right: 30, bottom: 10, left: 30},
-	width3 = 930 - margin3.left - margin3.right,
-	height3 = 400 - margin3.top - margin3.bottom;
-
+	width1 = 355 - margin1.left - margin1.right,
+	height1 = 451 - margin1.top - margin1.bottom;
 
 // create x scales
 var xScale1 = d3.scale.ordinal()
                 .rangeRoundBands([0, width1], .1);
 
-var xScale2 = d3.scale.linear()
-    			      .range([0, width2]);
-
-var xScale3 = d3.scale.ordinal()
-    			      .rangePoints([0, width3]);
-
-
 // create y scales 
 var yScale1 = d3.scale.linear()
              	.rangeRound([height1, 0]);
 
-var yScale2 = d3.scale.linear()
-    			      .range([height2, 0]);
-
-var yScale3 = {};
-
-
 // create color scales (ordinal)
 var colorScale1 = d3.scale.ordinal()
-                    .range(["#fdc086","#beaed4"]);
-
-var colorScale2 = d3.scale.ordinal()
-                    .range(["#fdc086","#beaed4"]);
-
-var colorScale3 = d3.scale.ordinal()
                     .range(["#fdc086","#beaed4"]);
 
 // create axes based on scales
@@ -53,24 +25,84 @@ var xAxis1 = d3.svg.axis()
                .scale(xScale1)
                .orient("bottom");
 
-var xAxis2 = d3.svg.axis()
-    		       .scale(xScale2)
-    		       .orient("bottom");
-
 var yAxis1 = d3.svg.axis()
                .scale(yScale1)
                .orient("left");
-               // .tickFormat(d3.format(".2s"))
 
-var yAxis2 = d3.svg.axis()
-    		       .scale(yScale2)
-    		       .orient("left");
+// create svg images
+var svg1 = d3.select("svg#bar")
+    		 .attr("width", width1 + margin1.left + margin1.right)
+   			 .attr("height", height1 + margin1.top + margin1.bottom)
+    	     .append("g")
+  		     .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
+
+// create tooltip for the hover 
+var tooltip1 = d3.select("body").append("div")   
+    			 .attr("class", "tooltip")               
+   				 .style("opacity", 0.9);
+
+// create titles for plots
+var title1 = svg1.append("text")
+				 .attr("class", "title")
+    		     .attr("x", (width1 / 2))             
+   			     .attr("y", 0 - (margin1.top / 2))
+   			     .attr("text-anchor", "middle")  
+   			     .text("Distribution of Wine Quality by Type");
+
+
+// create variables for scatter
+
+// create color scale 
+var colorScale2 = d3.scale.ordinal()
+                    .range(["#fdc086","#beaed4"]);
+
+// set size of each plot and padding
+var size2 = 85;
+var padding2 = 7;
+var n2 = 5;
+var margin2 = 60;
+
+// create svg images
+var svg2 = d3.select("svg#scatter")
+             .attr("width", size2 * n2 + 2 * padding2 + margin2)
+             .attr("height", size2 * n2 + 2 * padding2)
+             .append("g")
+             .attr("transform", "translate(" + padding2 / 2 + "," + padding2 / 2 + ")");
+
+// create tooltip for the hover 
+var tooltip2 = d3.select("body").append("div")   
+           .attr("class", "tooltip")               
+           .style("opacity", 0.9);
+
+// create titles for plots
+var title2 = svg2.append("text")
+				 .attr("class", "title")
+        		 .attr("x", ((size2 * n2 + 2 * padding2 + margin2) / 2))             
+       			 .attr("y", 0 + (margin2 / 2))
+       			 .attr("text-anchor", "middle")  
+       			 .text("Scatterplot Matrix");
+
+
+// // create other variables for parallel
+
+// create margins, width, and height
+var margin3 = {top: 60, right: 30, bottom: 10, left: 30},
+  width3 = 960 - margin3.left - margin3.right,
+  height3 = 500 - margin3.top - margin3.bottom;
+
+// create scales
+var xScale3 = d3.scale.ordinal()
+                .rangePoints([0, width3]);
+
+var yScale3 = {};
+
+// create color scale 
+var colorScale3 = d3.scale.ordinal()
+                    .range(["#fdc086","#beaed4"]);
 
 // create axis
 var Axis3 = d3.svg.axis()
               .orient("left");
-
-// // create other variables for parallel
 
 // create empty dragging variable 
 var dragging3 = {};
@@ -83,57 +115,20 @@ var background3;
 var foreground3;
 
 // create svg images
-var svg1 = d3.select("svg#bar")
-    		 .attr("width", width1 + margin1.left + margin1.right)
-   			 .attr("height", height1 + margin1.top + margin1.bottom)
-    	     .append("g")
-  		     .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
-
-var svg2 = d3.select("svg#scatter")
-    		 .attr("width", width2 + margin2.left + margin2.right)
-   			 .attr("height", height2 + margin2.top + margin2.bottom)
-   			 .append("g")
-   			 .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
-
-
 var svg3 = d3.select("svg#parallel")
-    		     .attr("width", width3 + margin3.left + margin3.right)
-   			     .attr("height", height3 + margin3.top + margin3.bottom)
+             .attr("width", width3 + margin3.left + margin3.right)
+             .attr("height", height3 + margin3.top + margin3.bottom)
              // .attr("id", "plot")
              // .attr("display", "block")
-   			     .append("g")
-   			     .attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
-
+             .append("g")
+             .attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
 
 // create tooltip for the hover 
-var tooltip1 = d3.select("body").append("div")   
-    			 .attr("class", "tooltip")               
-   				 .style("opacity", 0.9);
-
-var tooltip2 = d3.select("body").append("div")   
-     			 .attr("class", "tooltip")               
-    			 .style("opacity", 0.9);
-
 var tooltip3 = d3.select("body").append("div")   
-     			 .attr("class", "tooltip")               
-    			 .style("opacity", 0.9);
-
+           .attr("class", "tooltip")               
+           .style("opacity", 0.9);
 
 // create titles for plots
-var title1 = svg1.append("text")
-				 .attr("class", "title")
-    		     .attr("x", (width1 / 2))             
-   			     .attr("y", 0 - (margin1.top / 2))
-   			     .attr("text-anchor", "middle")  
-   			     .text("Distribution of Wine Quality by Type");
-
-var title2 = svg2.append("text")
-				 .attr("class", "title")
-        		 .attr("x", (width2 / 2))             
-       			 .attr("y", 0 - (margin2.top / 2))
-       			 .attr("text-anchor", "middle")  
-       			 .text("Scatterplot Matrix");
-
 var title3 = svg3.append("text")
 				 .attr("class", "title")
        			 .attr("x", (width3 / 2))             
@@ -141,18 +136,18 @@ var title3 = svg3.append("text")
        			 .attr("text-anchor", "middle")  
        			 .text("Parallel Coordinates");
 
-// create format for budget
-var format = d3.format("0,000,000");
-
+window.onload = d3.select("input#red").property("checked", true),
+                d3.select("input#white").property("checked", true); 
 
 // load data and add into svgs
 d3.csv("../dataset/winequality.csv", function(data) {
 
+    var colors = {"white": colorScale1("white"), "red": colorScale1("red")}
+
     // json of dimensions and adjusted titles
-    var cols = {"quality": "Quality Score", "alcohol": "Alcohol Level", "chlorides": "Chlorides", "citricAcid": "Citric Acis", 
-                "density": "Density", "fixedAcidity": "Fixed Acidity", "freeSulfurDioxide": "Free Sulfur \nDioxide", "pH": "pH",
-                "residualSugar": "Residual Sugar", "sulphates": "Sulphates", "totalSulfurDioxide": "Total Sulfur Dioxide", 
-                "volatileAcidity": "Volatile Acidity", "type": "Type"}
+    var cols = {"alcohol": "Alcohol Level", "chlorides": "Chlorides", "citricAcid": "Citric Acid", "density": "Density", "fixedAcidity": 
+                "Fixed Acidity", "freeSulfurDioxide": "Free Sulfur Dioxide", "pH": "pH", "residualSugar": "Residual Sugar", "sulphates": 
+                "Sulphates", "totalSulfurDioxide": "Total Sulfur Dioxide", "volatileAcidity": "Volatile Acidity"}
 
 
     var quality_counter = {}
@@ -173,14 +168,31 @@ d3.csv("../dataset/winequality.csv", function(data) {
 
     quality_bar = d3.entries(sorted(quality_counter));
 
-    // chart 1 generator
-  	chart1(quality_bar);
+    // var quality_counter2 = {}
+    // for (var i=0; i<data.length; i++) {
+    //     if (data[i].quality in quality_counter2) {
+    //         if (data[i].type =="red"){
+    //             quality_counter2[data[i].quality].red ++;
+    //         } 
+    //     } else {
+    //         if (data[i].type =="red"){
+    //             quality_counter2[data[i].quality] = {"red": 1};
+    //         } 
+    // }};
 
-  	// // chart 2 generator
-  	// chart2(data);
+    // quality_bar2 = d3.entries(sorted(quality_counter2));
+
+    // chart 1 generator
+  	chart1(quality_bar, colors);
+
+    // create array of all variables we want to see in matrix
+    var variables = ["alcohol", "chlorides", "fixedAcidity", "citricAcid", "density"];
+
+  	// chart 2 generator
+  	chart2(data, variables, cols, colors);
 
   	// chart 3 generator
-  	chart3(data, cols);
+  	chart3(data, cols, colors);
 
 
   })
@@ -188,17 +200,19 @@ d3.csv("../dataset/winequality.csv", function(data) {
 // d3.slider().axis(true).min(0).max(10).step(1);
 
 //// CHART 1 CREATION ////
-function chart1(data){
+function chart1(data, colors){
 
-    colorScale1.domain(["white", "red"]);
+    colorScale1.domain(d3.keys(data[0].value).filter(function(key) { return key; }));
 
     data.forEach(function(d) {
         var y0 = 0;
         d.types = colorScale1.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d.value[name]}; });
-        d.total = d.value.red + d.value.white;
+        if(d.types.length===1){ 
+            d.total = colorScale1.domain().map(function(name) { return d.value[name] });
+        } else { 
+            d.total = d.value.red + d.value.white
+        };
     });
-
-    console.log(data);
 
     xScale1.domain(data.map(function(d) { return d.key; }));
     yScale1.domain([0, d3.max(data, function(d) { return d.total; })]);
@@ -242,7 +256,7 @@ function chart1(data){
          .attr("width", xScale1.rangeBand())
          .attr("y", function(d) { return yScale1(d.y1); })
          .attr("height", function(d) { return yScale1(d.y0) - yScale1(d.y1); })
-         .style("fill", function(d) { return colorScale1(d.name); })
+         .style("fill", function(d) { return colors[d.name]; })
          .style("opacity", 0.7)
          .on("mouseover", function(d) {
               tooltip1.transition()
@@ -264,72 +278,102 @@ function chart1(data){
 
 
 //// CHART 2 CREATION ////
-function chart2(data) {
+function chart2(data, variables, cols, colors) {
+    // create empty scales that will be updated for each plot
+    var xScale2 = {};
+    var yScale2 = {};
 
-	// create domains for x and y scale
-	xScale2.domain(d3.extent(data, function(d) { return d.length; })).nice();
-  	yScale2.domain(d3.extent(data, function(d) { return d.rating; })).nice();
+    // create different x and y scales for each variable
+    variables.forEach(function(variable) {
+        data.forEach(function(d) { d[variable] = +d[variable]; });
+        xScale2[variable] = d3.scale.linear()
+                              .domain(d3.extent(data, function(d) { return d[variable]; }))
+                              .nice()
+                              .range([padding2, size2 - padding2]);
+                                        
+        yScale2[variable] = d3.scale.linear()
+                              .domain(d3.extent(data, function(d) { return d[variable]; }))
+                              .nice()
+                              .range([size2 - padding2, padding2]);                                  
+    }); 
 
-  	// add x axis and label
-	svg2.append("g")
-        .attr("class", "x2 axis")
-        .attr("transform", "translate(0," + height2 + ")")
-        .call(xAxis2)
-    	.append("text")
-        .attr("class", "label2")
-        .attr("x", width2/2)
-        .attr("y", 35)
-        .style("text-anchor", "middle")
-        .text("Length of Movie (in minutes)");
+    // create the axes
+    var Axis2 = d3.svg.axis()
+                      .ticks(4)
+                      .tickSize(size2 * n2); 
 
-    // add y axis and label
-  	svg2.append("g")
-        .attr("class", "y2 axis")
-        .call(yAxis2)
-	    .append("text")
-        .attr("class", "label2")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin2.left + 15)
-        .attr("x", 0 - height2/2)
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .text("Rating of Movie")
+    // create x axis for each plot
+    svg2.selectAll(".x.axis")
+        .data(variables)
+        .enter()
+        .append("g")
+        .attr("class", "scatter x axis")
+        .attr("transform", function(d, i) { return "translate(" + i * size2 + ",0)"; })
+        .each(function(d)  { d3.select(this).call(Axis2.scale(xScale2[d]).orient("bottom")); });
 
-    // add dots and mouseovers 
-    svg2.selectAll(".dot")
-      	.data(data)
-    	.enter()
-    	.append("circle")
-      	.attr("class", "dot")
-   	    .attr("r", 2)
-        .attr("cx", function(d) { return xScale2(d.length); })
-	    .attr("cy", function(d) { return yScale2(d.rating); })
-        .style("fill", function(d) { return color2(d.mpaa); })
-        .style("opacity", 0.5)
-        .on("mouseover", function(d) {
-            tooltip2.transition()
-            		.duration(200)
-                    .style("opacity", 1)
-            tooltip2.html("<span><b>Movie Title</b>: " + d.title +"</span><br>" +
-            			  "<span><b>MPAA Rating</b>: " + d.mpaa +" </span><br>" +
-                          "<span><b>Length of Movie</b>: " + d.length + " mins. </span><br>" +
-                          "<span><b>Rating</b>: " + d.rating + "</span><br>")
-                   .style("left", (event.pageX + 15) + "px")     
-                   .style("top", (event.pageY - 20) + "px"); 
-            d3.select(this).style("opacity", 1)
-            		 	   .attr("r", 5); 
-          })
-        .on("mouseout", function(d){
-            tooltip2.transition()
-                   .style("opacity", 0);
-            d3.select(this).style("opacity", 0.5)
-            			   .attr("r", 2); });
+    // create y axis for each plot 
+    svg2.selectAll(".y.axis")
+        .data(variables)
+        .enter()
+        .append("g")
+        .attr("class", "scatter y axis")
+        .attr("transform", function(d, i) { return "translate(0," + i * size2 + ")"; })
+        .each(function(d) { d3.select(this).call(Axis2.scale(yScale2[d]).orient("right"));  });
+
+    // create cell and plots
+    var cell = svg2.selectAll(".cell")
+                   .data(cross(variables, variables))
+                   .enter()
+                   .append("g")
+                   .attr("class", "cell")
+                   .attr("transform", function(d) { return "translate(" + d.i * size2 + "," + d.j * size2 + ")"; })
+                   .each(plot);
+
+    // create titles for the diagonal
+    cell.filter(function(d) { return d.i == d.j; }).append("text")
+        .attr("x", padding2)
+        .attr("y", padding2)
+        .attr("dy", ".71em")
+        .text(function(d) { return cols[d.x]; });
+
+    // function to create all the scatter plots
+    function plot(p) {
+      var cell = d3.select(this);
+
+      // create plot frame
+      cell.append("rect")
+          .attr("class", "frame")
+          .attr("opacity", "1")
+          .attr("x", padding2 / 2)
+          .attr("y", padding2 / 2)
+          .attr("width", size2 - padding2)
+          .attr("height", size2 - padding2);
+
+      // create points in each frame
+      cell.selectAll("circle")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("class", function(d) { return d.type; })
+          .attr("cx", function(d) { return xScale2[p.x](d[p.x]); })
+          .attr("cy", function(d) { return yScale2[p.y](d[p.y]); })
+          .attr("r", 1)
+          .attr("opacity", 0.5)
+          .attr("fill", function(d) { return colors[d.type]; });
+    }
+
+    // function to show cross product of all variables
+    function cross(a, b) {
+        var c = [], n = a.length, m = b.length, i, j;
+        for (i = -1; ++i < n;) for (j = -1; ++j < m;) c.push({x: a[i], i: i, y: b[j], j: j});
+        return c;
+    }
 
 }
 
 
 //// CHART 3 CREATION ////
-function chart3(data, cols) {
+function chart3(data, cols, colors) {
 
     // empty list of categoricals
     categoricals = [];
@@ -368,7 +412,7 @@ function chart3(data, cols) {
                       .data(data)
                       .enter()
                       .append("path")
-                      .style("stroke", function(d) { return colorScale3(d.type); })
+                      .style("stroke", function(d) { return colors[d.type]; })
                       .style("stroke-width", 1.25)
                       .attr("d", path);
 
@@ -422,36 +466,6 @@ function chart3(data, cols) {
 }
 
 
-// function to create legend in chart 1
-function create_legend(data){
-
-    // create legend for mpaa rating 
-	var legend = svg1.selectAll(".legend")
-      				 .data(data)
-    				 .enter()
-    				 .append("g")
-      				 .attr("class", "legend")
-      				 .style("border", "#000")
-      				 .attr('transform', function(d, i) {  return "translate(0," + i * 25 + ")"; });
-
-  	legend.append("rect")
-          .attr("x", width1 + 20)
-      	  .attr("width", 18)
-      	  .attr("height", 18)
-          .style("fill", function(d){ return d.value.color })
-          .style("opacity", 0.7)
-          .on("click", function(d) {
-          	d3.select(this).style("opacity", 1);
-          	console.log(d.key)
-          	console.log(d3.select(this).selected());
-          });
-
-  	legend.append("text")
-          .attr("x", width1 + 40)
-          .attr("y", 13)
-          .text(function(d) { return d.key; });
-}
-
 // function to sort the data
 function sorted(obj) {
 
@@ -463,18 +477,7 @@ function sorted(obj) {
         }
     }
 
-    // // sort the keys 
-    // if (temp_array.length==4) {
-    //     temp_array.sort(function(a,b) {
-    //     	  var a_value = obj[a].value;
-    //         var b_value = obj[b].value;
-    //       	return ((a_value < b_value) ? 1 : ((a_value > b_value) ? -1 : 0));
-    //     });
-    // }
-    // else {
     	temp_array.sort();
-
-      console.log(temp_array);
     // }
 
     // create new object sorted
@@ -524,3 +527,5 @@ function brush() {
         }) ? null : "none";
     });
 }
+
+    
