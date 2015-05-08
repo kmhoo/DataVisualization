@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Homework #5</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+
+    <!-- load custom CSS and JavaScript //-->
+    <script src="hw5/script.js"></script>
+
+    <style type="text/css">
+
+    body {
+        padding-top: 50px;
+        padding-bottom: 20px;
+        padding-left: auto;
+        padding-right: auto;
+    }
+
+    svg {
+        background-color: white;
+        margin: 0px;
+        float: left;
+    }
+
+    #block {
+        max-width: 950px;
+    }
+
+    #log {
+        color: dimgray;
+
+        font-size: 10px;
+        font-style: italic;
+        text-align: center;
+
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .country {
+        fill: #d9d9d9;
+    }
+
+    .symbol {
+        fill: none;
+        fill-opacity: 0.75;
+
+        stroke: #a50f15;
+        stroke-width: 1px;
+        stroke-opacity: 0.3;
+    }
+
+    /*
+    * We can specify how to highlight based
+    * on the type of underlying object.
+    */
+
+    circle.highlight {
+        stroke: orangered;
+        stroke-width: 2px;
+    }
+
+    path.highlight {
+        fill: whitesmoke;
+
+        stroke: tomato;
+        stroke-width: 1px;
+    }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- Fixed Navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://kmhoo.github.io/DataVisualization/">MSAN 622</a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="http://kmhoo.github.io/DataVisualization/#homework">Homework</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#project">Project</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#participation">Participation</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://kmhoo.github.io/DataVisualization/#about">About</a></li>
+                <li><a href="http://kmhoo.github.io/DataVisualization/#contact">Contact</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container">
+    <div class="col-lg-12 text-center" id="chart">
+
+        <div style="text-align:center;">
+            <h1>Homework #5: Earthquakes Visualization</h1>
+            <p> 
+                You will create a visualization of the latest earthquakes in D3.
+                <br>
+                Kailey Hoo: <a href="https://github.com/kmhoo/DataVisualization/blob/gh-pages/homework/homework5.html">Source Code </a>
+            </p>
+        </div>      
+
+        <div id="block" class="col-lg-12 text-center">
+        <svg id="map" width="940" height="480"></svg>
+        <p id="log">Loading map... please wait.</p>
+        </div>
+
+
+        <script>
+        /*
+         * For sample TopoJSON files, go to:
+         * https://gist.github.com/mbostock/4090846
+         */
+        var base = "https://gist.githubusercontent.com/mbostock/4090846/raw/";
+        var url = {
+            world: base + "world-50m.json",
+            earthquakes: "hw5/4.5_month.csv"
+        };
+
+        // Uses reusable chart model
+        // See http://bost.ocks.org/mike/chart/
+        var chart = symbolMap();
+
+        // Update how we access data (need the precip property)
+        chart = chart.value(function(d) { return d.mag; });
+
+        // Nested calls to trigger drawing in proper order
+        d3.json(url.world, function(mapError, mapJSON) {
+            if (processError(mapError)) return;
+
+            // update map data
+            chart = chart.map(mapJSON);
+
+            // Wait until the map is drawn before loading
+            // and drawing the data values
+            d3.csv(url.earthquakes, function(dataError, dataJSON) {
+                if (processError(dataError)) return;
+
+                chart = chart.values(dataJSON);
+                chart("map");
+            });
+        });
+
+
+        </script>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+
+        <div class="col-md-5">
+
+            <h2 class="page-header"><a name="functionality"></a>Functionality</h2>
+
+            <ul>
+                <li> Basic </li>
+                <ul>
+                    <li> Modify the code such that you are using the world-50.json </li>
+                </ul>
+                <li> Moderate </li>
+                <ul>
+                    <li> Modify the code so you color the circles by depth as well </li>
+                </ul>
+                <li> Advanced </li>
+                <ul>
+                    <li> Modify the code so you can pan/rotate the map </li>
+                </ul>
+            </ul>
+        </div>
+
+        <div class="col-md-5">
+            <h2 class="page-header"><a name="interact"></a>How To Interact</h2>
+            <ul>
+                <li> Hover over the circles to see the hover the circles to see the location, magnitude, and depth of each earthquake </li>
+                <li> Click and drag to rotate the map to see a different view of world </li>
+            </ul>
+        </div>
+
+        <div class="col-md-1">
+        </div>
+    </div>
+
+    <hr/>
+
+    <footer>
+        <p style="text-align: center;">Kailey Hoo &bullet; MSAN 622 Information Visualization &bullet; Spring 2015</p>
+    </footer>
+
+</div><!--/.container -->
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/d3.min.js"></script>
+
+
+</body>
+</html>
