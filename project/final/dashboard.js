@@ -118,7 +118,7 @@ function chart1(type, quality, colors){
                  .attr("text-anchor", "middle")  
                  .text("Distribution of Wine Quality by Type");
 
-    d3.csv("dataset/winequality-subset.csv", function(data) {
+    d3.csv("../dataset/winequality-subset.csv", function(data) {
 
         var quality_counter = {}
 
@@ -286,7 +286,7 @@ function chart2(type, quality, cols, colors) {
                  .attr("text-anchor", "middle")  
                  .text("Scatterplot Matrix");
 
-    d3.csv("dataset/winequality-subset.csv", function(data) {
+    d3.csv("../dataset/winequality-subset.csv", function(data) {
         // create array of all variables we want to see in matrix
         // var variables = ["alcohol", "chlorides", "fixedAcidity", "citricAcid", "density"];
         s1 = document.getElementsByName("box1")[0];
@@ -555,7 +555,7 @@ function chart3(type, quality, cols, colors) {
                  .attr("text-anchor", "middle")  
                  .text("Parallel Coordinates");
 
-    d3.csv("dataset/winequality-subset.csv", function(data) {
+    d3.csv("../dataset/winequality-subset.csv", function(data) {
         // empty list of categoricals
         categoricals = [];
 
