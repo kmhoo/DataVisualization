@@ -82,12 +82,12 @@
         </p>
     </div>
 
-
     <div class="row">
         <div class="col-md-1">
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-10">
+
             <h3 class="text-center">Techniques</h3>
             <ul>
                 <li>
@@ -104,16 +104,28 @@
                     <b>Scatterplot Matrix</b>
                 </li>
                 <p>
-                    <tab>
+                    <tab> For the scatter plot matrix, I used all of the columns in the dataset. Initially, I thought that I would choose the most interesting metrics and only plot those, but because I decided to allow the user to choose which variables they wanted to see, I ended up including everything. With the five drop down menus, I create a list of the five variables selected. With these, I use the dataset to fill in each of the plots. To be able to keep coloring consistent, I had the colors reflect the red and white wine types. I thought about having the option to have color by type or quality score but I thought that that might get a little too messy with 10 different quality scores. From this, I chose to not include grid lines to eliminate clutter, and chose to have the y axis on the right hand side so that there wasnt a huge break between the two plots. I wanted to keep both of the axes on either end. Since there were too many points on each of the plots, I had them have opacity in order to be able to see some of the overlap.
+                    <br>
+                    <tab>The data-ink ratio is very high on this chart but I think that the other two metrics, data density, and lie factor are lower in this chart than I would like them to be. For the data-ink ratio, I think I included the necessary components without losing too much information. As I stated above, I excluded the grid lines to not show too much. Instead, I have a tooltip for when you hover over the circle the actual values for that plot show. For the data density, I think the issue lies in the outliers of each of the plots. There are a ton of points that fall on top of each other and into one corner for some of the plots. This is because there is only one or two that lie outside of this cluster causing the max and min to be higher or lower than we want. I do not know how to avoid this because excluding those points would add to my lie factor. For the lie factor I think because there is so much overlap, it is actually hard to see how many points lie in a given area, decreasing my lie factor. Also, the size of the points could make it easier to see all of the point but then I think it would be hard to even see the points. THe opacity helps a little bit but when more than a couple points lie on top of each other, it is difficult to see how many points there actually are.
+                    <br>
+                    <tab>Although this plot could definitely use some improvements to make it easier to see the details, I think it is very good at showing the relationships between all of the variables. It shows us certain outliers and with the tooltips we can see what quality score those outliers are. This also helps us to interpret what we are trying to determine, what variables reflect the type and score of a wine. If we can find correlations between variables, we can understand the chemical components behind it. I think I chose a good number of variables to chart against each other and with the drop down menus, you can see any variables you want to.
                 </p>
                 <li>
                     <b>Parallel Coordinates</b>
                 </li>
-
+                <p>
+                    <tab>
+                </p>
              
             </ul>
+        </div>
+        
+        <div class="col-md-1">
+        </div>
+    </div>
 
-
+    <div class="row">
+        <div class="col-md-1">
         </div>
 
         <div class="col-md-5">
@@ -121,28 +133,33 @@
             <h3 class="text-center">Interactivity</h3>
             <p> 
                 <tab>The two main interactivities that I did were the details on demand, and filtering. For the details on demand, I only implemented these on the bar chart and scatterplot matrix. When you hover over a bar or circle, these tooltips will show the type of wine, quality score, and, depending on what you are looking at, the metrics of the wine. On the bar chart, it lists the type of wine, quality score, and the number of samples. On the scatterplot matrix, it only shows the two metrics that you are comparing and the type of wine and quality score. For the scatterplot matrix, there are five drop down menus with all of the metrics. Whenever you change the value of one of the drop downs, the scatterplot matrix will reload with the correct metric. Because there were many numerical columns, I could not choose which ones to subset for. With these dropdown menus, you can choose whichever metrics you want, making it easier to find any correlations without too much clutter in the matrix. The main filtering that I implemented was the checkboxes for either filtering by red or white wine and the slider for filtering the type of quality score. First, with the checkboxes, I have it so that they are both selected on page load. If you de-select one of them, all three charts will be re-drawn with only the selected wine type. This is so you can focus on one type at a time, if desired, without the clutter. The slider for filtering quality score shows all samples (of whichever wine types you selected) and greys out everything else. This is so that you can see which samples are scored there, but can also still compare to all other samples. I decided not to get rid of the other scores because I think it is helpful to see them in relation to each other in order to maybe discover trends within wines with a certain quality score.
-            </p>
-
-            <h3 class="text-center">Feedback</h3>
-            <p> 
-                <tab>My prototype looked very similar to the final dashboard with no interactivity. Unfortunately, I have updated it since I showed my small group so linking to my prototype will not show the original prototype but I will discuss it in as much detail as I can. The format of the dashboard has remained the same. I have increased my charts slightly so that the scatterplot matrix is not too small. Also, I have created them (increasing/ decreasing margins) so that the axes line up between all of the plots, one of the suggestions my group had made. My bar chart was originally vertical stacked bars, the scatterplot matrix had smaller plots and the parallel coordinates chart did not include quality or type. My group had some great suggestions and all of them I used to correct my plots. The first suggestion was to switch the bar chart to horizontal. This was to be able to increase the size of my scatterplot matrix so that the dots weren't so unreadable. Also, I excluded the gridlines on the scatterplot matrix to reduce the data ink ratio and make the plot more readable. Another suggestion was to increase the opacity of the dots in the scatterplot matrix as well as the lines in the parallel coordinates to be able to see more of the data since many of them overlap. One of the biggest suggestions that they had was in regards to the colors of my plots. I had a light purple and a more faint yellow on my prototype. They suggested that I add a little bit more orange to the yellow and make the purple a little more of a dark maroon. The colors I ended up with were the closest I could find to those suggestions. Lastly, my plots were loading extremely slow, so they suggested I subset the data. I ended up only using about a fifth of the data in order for everything to load quick enough.
+                <br>
+                <tab> Additionally, the parallel coordinates had brushing and panning interactivity included on it. This was implemented so that you can focus in on certain values on each of the axes and see what other values on the other axes those wine samples are. This helps with focusing and eliminates some of the clutter. Lastly, I have the parallel coordinates so that you can move each of the axes. This makes it easier to see certain metrics next to each other and if there are any trends or correlations between the two.
             </p>
 
             <h3 class="text-center">Challenges</h3>
             <p> 
                 <tab> There were many challenges that I ran into. The main source of my challenges were the interactions with all of the charts. I had a lot of issues getting them to switch on a button change. The way I worked around this was having the SVG's re-drawn each time a filter was applied. I was able to get all of the checkboxes, slider, and dropdowns in the html to call the same function where each of the charts gets called again. The one interaction that I was not able to get done was when you click on the bar chart and it filters from there. This was a little more difficult because it is called from within the rectangle that I am drawing whereas the other ones are outside of it. I was not able to figure out how to call the other bars and plots to filter on the click of a certain bar. Lastly, I think one of the hardest things for me to deal with was picking the colors. I wanted the colors to reflect the type of wine that it was representing, red or white. I didn't want the red to be intense, and, obviously, I couldn't have white. Therefore, I chose a red with a more purple/maroon color and a white with a yellow tint in it. I am still a little iffy about the colors that I chose, but they were the best ones that could compliment each other.
             </p>
+
+        </div>
+
+        <div class="col-md-5">
+
+
+            <h3 class="text-center">Feedback</h3>
+            <p> 
+                <tab>My prototype looked very similar to the final dashboard with no interactivity. Unfortunately, I have updated it since I showed my small group so linking to my prototype will not show the original prototype but I will discuss it in as much detail as I can. The format of the dashboard has remained the same. I have increased my charts slightly so that the scatterplot matrix is not too small. Also, I have created them (increasing/ decreasing margins) so that the axes line up between all of the plots, one of the suggestions my group had made. My bar chart was originally vertical stacked bars, the scatterplot matrix had smaller plots and the parallel coordinates chart did not include quality or type. My group had some great suggestions and all of them I used to correct my plots. The first suggestion was to switch the bar chart to horizontal. This was to be able to increase the size of my scatterplot matrix so that the dots weren't so unreadable. Also, I excluded the gridlines on the scatterplot matrix to reduce the data ink ratio and make the plot more readable. Another suggestion was to increase the opacity of the dots in the scatterplot matrix as well as the lines in the parallel coordinates to be able to see more of the data since many of them overlap. One of the biggest suggestions that they had was in regards to the colors of my plots. I had a light purple and a more faint yellow on my prototype. They suggested that I add a little bit more orange to the yellow and make the purple a little more of a dark maroon. The colors I ended up with were the closest I could find to those suggestions. Lastly, my plots were loading extremely slow, so they suggested I subset the data. I ended up only using about a fifth of the data in order for everything to load quick enough.
+            </p>
+
+            <h3 class="text-center">Conclusions</h3>
+            <p>
+                <tab>This dataset was extremely difficult to understand how the quality score of the wines are determined. There are many factors that go into someone's preferences for wines and I chose plots that I thought would show the most details. First of all, we can see that there is a pretty even distribution of scores that were given to us. Although I did subset the data, I chose to keep the distribution relatively the same. One of the biggest factors that is obvious to see from the parallel coordinates, is that the lower the alcohol level, the lower the quality score, in general. However, aside from this there is no correlations that obviously show what effects the quality score. On the other hand, we can look at some correlations between the type of wine as well as between some of the other metrics. We can see from the parallel coordinates, the red wines tend to have a higher fixed acidity as well as a higher volatile acidity than the white wines. In contrast, the total sulfur dioxide for red white is lower than those for white wines. Another thing we can see is that the red wines have close to zero residual sugar. The scatterplot matrix can show us many relationships between each of the metrics. Most of them have no corrlelation but we can see the fixed acidity and citric acid have the strongest positive relationship. pH and fixed acidity have a negative relationship. This visualization was very informative in helping me understand the chemical factors that go into wines. I do think that there is no obvious relationship that determines quality scores but we can see other relationships within the data.
+            </p>
         </div>
 
         <div class="col-md-1">
         </div>
-    </div>
-
-    <div class="col-lg-12 text-center">
-     <h3 class="text-center">Conclusions</h3>
-        <p>
-            <tab>This dataset was extremely difficult to understand how the quality score of the wines are determined. There are many factors that go into someone's preferences for wines and I chose plots that I thought would show the most details. First of all, we can see that there is a pretty even distribution of scores that were given to us. Although I did subset the data, I chose to keep the distribution relatively the same. One of the biggest factors that is obvious to see from the parallel coordinates, is that the lower the alcohol level, the lower the quality score, in general. However, aside from this there is no correlations that obviously show what effects the quality score. On the other hand, we can look at some correlations between the type of wine as well as between some of the other metrics. We can see from the parallel coordinates, the red wines tend to have a higher fixed acidity as well as a higher volatile acidity than the white wines. In contrast, the total sulfur dioxide for red white is lower than those for white wines. Another thing we can see is that the red wines have close to zero residual sugar. The scatterplot matrix can show us many relationships between each of the metrics. Most of them have no corrlelation but we can see the fixed acidity and citric acid have the strongest positive relationship. pH and fixed acidity have a negative relationship. This visualization was very informative in helping me understand the chemical factors that go into wines. I do think that there is no obvious relationship that determines quality scores but we can see other relationships within the data.
-        </p>
     </div>
 
     <hr/>
