@@ -234,12 +234,13 @@ function chart1(type, quality, colors){
                 }
               })
              .style("opacity", 0.7)
-             .on("click", greyEverything)
+             // .on("click", greyEverything)
              .on("mouseover", function(d) {
                   tooltip1.transition()
                       .duration(200)
                           .style("opacity", 1)
                   tooltip1.html("<span><b>Wine Type</b>: " + d.name + " </span><br>" +
+                                "<span><b>Quality Score</b>: " + d.key + "</span><br>" +
                                 "<span><b>Number of Samples</b>: " + (d.x1-d.x0) + "</span><br>")
                          .style("left", (event.pageX + 15) + "px")     
                          .style("top", (event.pageY - 20) + "px"); 
@@ -420,6 +421,7 @@ function chart2(type, quality, cols, colors) {
                           .duration(200)
                               .style("opacity", 1)
                       tooltip2.html("<span><b>Wine Type</b>: " + d.type + " </span><br>" +
+                                    "<span><b>Quality Score</b>: " + d.quality + "</span><br>" +
                                     "<span><b>" + cols[p.x] + "</b>: " + d[p.x] + "</span><br>" +
                                     "<span><b>" + cols[p.y] + "</b>: " + d[p.y] + "</span><br>")
                              .style("left", (event.pageX + 15) + "px")     

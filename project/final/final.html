@@ -9,7 +9,6 @@
 
     <link href="../../css/bootstrap.min.css" rel="stylesheet">
     <link href="../../css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="../../css/d3.slider.css" rel="stylesheet">
 
     <style type="text/css">
     body {
@@ -184,7 +183,7 @@
                 <label><input type="checkbox" id="red" onchange="checkChange(1)"> Red Wine </label>
                 <br>
                 <div>
-                    <label for=quality>Quality Score:</label> <output for=quality id="volume">0</output>
+                    <label for=quality>Quality Score (Select 0 for ALL scores):</label> <output for=quality id="volume">0</output>
                     <input class="slider" type="range" min="0" max="10" value="0" step="1" id="quality" oninput="outputUpdate(value); checkChange(2);" />
                     
                     <script>
